@@ -21,14 +21,102 @@ import {
   Sparkles,
   Eye,
   Shield,
-  Zap
+  Zap,
+  GraduationCapIcon,
+  TrendingUpIcon,
+  PhoneIcon,
+  MailIcon,
+  Quote,
+  CreditCardIcon,
+  SmartphoneIcon,
+  BuildingIcon,
+  AlertTriangleIcon
 } from 'lucide-react';
+
+// Scholar Card Component
+interface Scholar {
+  name: string;
+  location: string;
+  quote: string;
+  aspiration: string;
+}
+
+const ScholarCard: React.FC<{ scholar: Scholar; index: number }> = ({ scholar }) => (
+  <motion.div
+    className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden border border-gray-100"
+    variants={{
+      hidden: { 
+        opacity: 0, 
+        y: 60,
+        rotateX: -15,
+        scale: 0.9
+      },
+      visible: { 
+        opacity: 1, 
+        y: 0,
+        rotateX: 0,
+        scale: 1,
+        transition: {
+          duration: 0.8,
+          ease: [0.16, 1, 0.3, 1],
+          type: "spring",
+          stiffness: 100,
+          damping: 15
+        }
+      }
+    }}
+    whileHover={{
+      y: -8,
+      scale: 1.02,
+      transition: { duration: 0.3 }
+    }}
+  >
+    {/* Gradient Header */}
+    <div className="h-2 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-600" />
+    
+    <div className="p-6">
+      {/* Quote Section */}
+      <div className="mb-6">
+        <div className="flex items-start mb-4">
+          <Quote className="w-6 h-6 text-blue-500 mr-3 mt-1 flex-shrink-0" />
+          <blockquote className="text-gray-700 font-medium italic leading-relaxed">
+            "{scholar.quote}"
+          </blockquote>
+        </div>
+      </div>
+
+      {/* Scholar Info */}
+      <div className="border-t border-gray-100 pt-4">
+        <h3 className="text-xl font-bold text-gray-800 mb-2">{scholar.name}</h3>
+        
+        <div className="flex items-center text-gray-600 mb-3">
+          <MapPinIcon className="w-4 h-4 mr-2 text-blue-500" />
+          <span className="text-sm">{scholar.location}</span>
+        </div>
+        
+        <div className="flex items-center justify-between">
+          <div className="flex items-center text-gray-600">
+            <TargetIcon className="w-4 h-4 mr-2 text-green-500" />
+            <span className="text-sm font-medium">Aspiring {scholar.aspiration}</span>
+          </div>
+          
+          <motion.div
+            className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center"
+            whileHover={{ scale: 1.1, rotate: 180 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Star className="w-4 h-4 text-white" />
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  </motion.div>
+);
+
 export const Home: React.FC = () => {
   // Enhanced state management for complex animations
   const [displayedTitle, setDisplayedTitle] = useState('');
-  const [isLoaded, setIsLoaded] = useState(false);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [particleKey, setParticleKey] = useState(0);
   
   const fullTitle = 'Restoring Hope in Cameroon';
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -46,7 +134,6 @@ export const Home: React.FC = () => {
   // Enhanced visibility tracking
   const titleInView = useInView(titleRef, { once: true, amount: 0.1 });
   const titleControls = useAnimation();
-  const heroControls = useAnimation();
 
   // Typewriter effect with enhanced timing
   useEffect(() => {
@@ -59,26 +146,14 @@ export const Home: React.FC = () => {
         } else {
           clearInterval(interval);
           titleControls.start('visible');
-          setIsLoaded(true);
         }
-      }, 80); // Faster typing for better UX
+      }, 80);
       return () => clearInterval(interval);
     }
   }, [titleInView, titleControls, fullTitle]);
 
-  // Particle animation trigger
-  useEffect(() => {
-    if (isLoaded) {
-      const particleInterval = setInterval(() => {
-        setParticleKey(prev => prev + 1);
-      }, 3000);
-      return () => clearInterval(particleInterval);
-    }
-  }, [isLoaded]);
-
-  // Premium animation variants inspired by CheckMe
+  // Premium animation variants
   const premiumVariants = {
-    // Hero section animations
     heroContainer: {
       hidden: { opacity: 0 },
       visible: {
@@ -105,13 +180,12 @@ export const Home: React.FC = () => {
         filter: "blur(0px)",
         transition: {
           duration: 1.2,
-          ease: [0.16, 1, 0.3, 1], // Custom CheckMe-style easing
+          ease: [0.16, 1, 0.3, 1],
           staggerChildren: 0.1
         }
       }
     },
 
-    // Enhanced card animations
     cardContainer: {
       hidden: { opacity: 0 },
       visible: {
@@ -155,7 +229,6 @@ export const Home: React.FC = () => {
       }
     },
 
-    // Floating animations
     float: {
       animate: {
         y: [0, -20, 0],
@@ -179,43 +252,6 @@ export const Home: React.FC = () => {
       }
     },
 
-    // Particle system
-    particle: (custom: number) => ({
-      scale: [0, 1, 0],
-      opacity: [0, 1, 0],
-      y: [0, -100],
-      x: [0, custom],
-      transition: {
-        duration: 3,
-        ease: "easeOut"
-      }
-    }),
-
-    // Icon animations
-    iconSpin: {
-      animate: {
-        rotate: [0, 360],
-        transition: {
-          duration: 20,
-          repeat: Infinity,
-          ease: "linear"
-        }
-      }
-    },
-
-    iconPulse: {
-      animate: {
-        scale: [1, 1.2, 1],
-        opacity: [0.7, 1, 0.7],
-        transition: {
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }
-      }
-    },
-
-    // Text reveal animations
     textReveal: {
       hidden: {
         opacity: 0,
@@ -233,7 +269,6 @@ export const Home: React.FC = () => {
       }
     },
 
-    // Stagger animations for lists
     staggerFast: {
       hidden: { opacity: 0 },
       visible: {
@@ -254,124 +289,9 @@ export const Home: React.FC = () => {
           delayChildren: 0.2
         }
       }
-    },
-
-    // Morphing animations
-    morphButton: {
-      rest: {
-        scale: 1,
-        backgroundColor: "var(--primary)",
-        transition: { duration: 0.3 }
-      },
-      hover: {
-        scale: 1.05,
-        backgroundColor: "var(--primary-dark)",
-        boxShadow: "0 10px 30px -10px rgba(0, 0, 0, 0.3)",
-        transition: { duration: 0.3 }
-      },
-      tap: {
-        scale: 0.95,
-        transition: { duration: 0.1 }
-      }
     }
   };
 
-  // Legacy animation variants (keeping for compatibility)
-  const fadeInUp = {
-    hidden: {
-      opacity: 0,
-      y: 60
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.22, 1, 0.36, 1]
-      }
-    }
-  };
-
-  const staggerContainer = {
-    hidden: {
-      opacity: 0
-    },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
-  };
-  const scaleIn = {
-    hidden: {
-      scale: 0.8,
-      opacity: 0
-    },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        ease: 'easeOut'
-      }
-    }
-  };
-  const slideIn = {
-    hidden: {
-      x: -50,
-      opacity: 0
-    },
-    visible: {
-      x: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        ease: 'easeOut'
-      }
-    }
-  };
-  // Parallax effect for hero image
-  const [scrollY, setScrollY] = useState(0);
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-  // References for sections to animate when in view
-  const statsRef = useRef(null);
-  const statsInView = useInView(statsRef, {
-    once: true,
-    amount: 0.3
-  });
-  const statsControls = useAnimation();
-  const areasRef = useRef(null);
-  const areasInView = useInView(areasRef, {
-    once: true,
-    amount: 0.3
-  });
-  const areasControls = useAnimation();
-  const impactRef = useRef(null);
-  const impactInView = useInView(impactRef, {
-    once: true,
-    amount: 0.3
-  });
-  const impactControls = useAnimation();
-  useEffect(() => {
-    if (statsInView) {
-      statsControls.start('visible');
-    }
-    if (areasInView) {
-      areasControls.start('visible');
-    }
-    if (impactInView) {
-      impactControls.start('visible');
-    }
-  }, [statsInView, areasInView, impactInView, statsControls, areasControls, impactControls]);
   return (
     <>
       <Helmet>
@@ -380,7 +300,7 @@ export const Home: React.FC = () => {
       </Helmet>
       
       <div className="w-full bg-white overflow-hidden">
-        {/* Enhanced Hero Section with Premium Animations */}
+        {/* Enhanced Hero Section */}
         <motion.section 
           ref={heroRef}
           className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-secondary via-secondary to-accent"
@@ -388,51 +308,13 @@ export const Home: React.FC = () => {
           animate="visible"
           variants={premiumVariants.heroContainer}
         >
-          {/* Animated Background Particles */}
-          <div className="absolute inset-0 overflow-hidden">
-            <AnimatePresence>
-              {Array.from({ length: 20 }, (_, i) => {
-                const randomX = Math.random() * 100 - 50;
-                const randomLeft = Math.random() * 100;
-                return (
-                  <motion.div
-                    key={`${particleKey}-${i}`}
-                    className="absolute w-2 h-2 bg-white rounded-full opacity-20"
-                    style={{
-                      left: `${randomLeft}%`,
-                      top: '100%',
-                    }}
-                    custom={randomX}
-                    variants={{ 
-                      hidden: { opacity: 0, scale: 0 }, 
-                      visible: premiumVariants.particle 
-                    }}
-                    initial="hidden"
-                    animate="visible"
-                    exit="hidden"
-                  />
-                );
-              })}
-            </AnimatePresence>
-          </div>
-
-          {/* Enhanced Background with Elegant Gradient Mesh */}
+          {/* Animated Background */}
           <motion.div 
             className="absolute inset-0 opacity-20"
-            style={{
-              y: y,
-              opacity: opacity
-            }}
+            style={{ y: y, opacity: opacity }}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-primary/5" />
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent" />
-            <div 
-              className="absolute inset-0 opacity-30"
-              style={{
-                backgroundImage: `radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(255,255,255,0.05) 0%, transparent 50%)`,
-                backgroundSize: '400px 400px'
-              }}
-            />
           </motion.div>
 
           {/* Floating Elements */}
@@ -509,31 +391,17 @@ export const Home: React.FC = () => {
                         Support Our Mission
                         <ArrowRightIcon className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                       </span>
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-primary to-accent"
-                        initial={{ x: "-100%" }}
-                        whileHover={{ x: "0%" }}
-                        transition={{ duration: 0.3 }}
-                      />
                     </Link>
                   </motion.div>
 
                   <motion.div variants={premiumVariants.textReveal}>
-                    <motion.button 
+                    <Link 
+                      to="/story"
                       className="border-2 border-white text-white hover:bg-white hover:text-secondary px-8 py-4 rounded-lg font-bold text-lg transition-all duration-300 flex items-center justify-center backdrop-blur-sm"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => alert('Video feature coming soon!')}
                     >
-                      <motion.div
-                        className="mr-2"
-                        whileHover={{ scale: 1.2, rotate: 10 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
-                        <PlayIcon className="h-5 w-5" />
-                      </motion.div>
-                      Watch Our Story
-                    </motion.button>
+                      <PlayIcon className="h-5 w-5 mr-2" />
+                      Our Story
+                    </Link>
                   </motion.div>
                 </motion.div>
 
@@ -574,7 +442,7 @@ export const Home: React.FC = () => {
                 </motion.div>
               </motion.div>
 
-              {/* Enhanced Hero Image with 3D Effects */}
+              {/* Hero Image */}
               <motion.div 
                 className="relative"
                 variants={premiumVariants.heroContent}
@@ -617,18 +485,6 @@ export const Home: React.FC = () => {
                     </div>
                   </motion.div>
                 </motion.div>
-
-                {/* Decorative Elements */}
-                <motion.div
-                  className="absolute -top-8 -left-8 w-32 h-32 bg-gradient-to-br from-primary to-accent rounded-full opacity-20 blur-xl"
-                  variants={premiumVariants.iconSpin}
-                  animate="animate"
-                />
-                <motion.div
-                  className="absolute -bottom-8 -right-8 w-24 h-24 bg-gradient-to-br from-accent to-primary rounded-full opacity-30 blur-xl"
-                  variants={premiumVariants.iconSpin}
-                  animate="animate"
-                />
               </motion.div>
             </div>
           </div>
@@ -654,64 +510,415 @@ export const Home: React.FC = () => {
               />
             </motion.div>
           </motion.div>
-      </motion.section>
-      {/* Mission Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-6">
-          <div className="max-w-4xl mx-auto text-center">
-            <SectionTitle title="Our Mission" subtitle="Transforming tragedy into hope and creating lasting positive change" centered />
-            <motion.p className="font-heading text-xl mb-10 text-gray-700" initial={{
-            opacity: 0
-          }} whileInView={{
-            opacity: 1
-          }} transition={{
-            duration: 0.8
-          }} viewport={{
-            once: true
-          }}>
-              The Jumbam Family Foundation was born from our attempt to
-              transform the painful loss of our father and husband, Mr. Ngek
-              Constantine Jumbam, into hope and transformation for Cameroon and
-              Africa. Despite the deep pain of this loss, we chose to channel
-              our grief into creating positive change for others affected by
-              this crisis.
-            </motion.p>
-            <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-8" initial="hidden" animate="visible" variants={staggerContainer}>
-              <MissionCard icon={<HeartIcon className="h-8 w-8" />} title="Restore Hope" description="We work to restore hope to widows, orphans, and communities devastated by the ongoing conflict." />
-              <MissionCard icon={<HandIcon className="h-8 w-8" />} title="Empower Lives" description="Through education initiatives, healthcare support, and women's empowerment programs." />
-              <MissionCard icon={<GlobeIcon className="h-8 w-8" />} title="Transform Cameroon" description="We are committed to building a brighter, more prosperous future for Cameroon." />
+        </motion.section>
+
+        {/* About Us Preview Section */}
+        <section className="py-20 bg-white">
+          <div className="container mx-auto px-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+              >
+                <div className="mb-6">
+                  <span className="inline-flex items-center px-4 py-2 bg-primary/10 rounded-full text-primary font-heading font-semibold text-sm">
+                    <BookIcon className="w-4 h-4 mr-2" />
+                    Our Story
+                  </span>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
+                  From Tragedy to <span className="text-primary">Hope</span>
+                </h2>
+                <p className="text-xl text-gray-600 mb-6">
+                  The Jumbam Family Foundation was born from our attempt to transform the painful loss of our father and husband, Mr. Ngek Constantine Jumbam, into hope and transformation for Cameroon and Africa.
+                </p>
+                <div className="space-y-4 mb-8">
+                  {[
+                    { icon: Eye, text: "Vision: A prosperous Cameroon and Africa" },
+                    { icon: Shield, text: "Mission: Restoring hope through action" },
+                    { icon: Zap, text: "Impact: Transforming communities daily" }
+                  ].map((item, index) => (
+                    <motion.div
+                      key={index}
+                      className="flex items-center space-x-3"
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1, duration: 0.6 }}
+                      viewport={{ once: true }}
+                    >
+                      <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                        <item.icon className="w-5 h-5 text-primary" />
+                      </div>
+                      <span className="text-gray-700 font-medium">{item.text}</span>
+                    </motion.div>
+                  ))}
+                </div>
+                <Link 
+                  to="/story"
+                  className="inline-flex items-center bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+                >
+                  Read Our Full Story
+                  <ArrowRightIcon className="ml-2 w-5 h-5" />
+                </Link>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+                className="relative"
+              >
+                <img
+                  src="/constantine.png"
+                  alt="Mr. Ngek Constantine Jumbam"
+                  className="w-full h-auto rounded-2xl shadow-lg"
+                />
+                <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-xl shadow-lg">
+                  <p className="text-sm text-gray-600 italic">"Transforming tragedy into hope"</p>
+                  <p className="text-sm font-semibold text-gray-800 mt-1">- Jumbam Family</p>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* Core Areas Section */}
+        <section className="py-20 bg-gray-50">
+          <div className="container mx-auto px-6">
+            <SectionTitle 
+              title="Our Core Areas" 
+              subtitle="Comprehensive support for lasting change" 
+              centered 
+            />
+            <motion.div 
+              className="grid grid-cols-1 md:grid-cols-3 gap-8"
+              initial="hidden"
+              whileInView="visible"
+              variants={premiumVariants.cardContainer}
+              viewport={{ once: true }}
+            >
+              {[
+                {
+                  icon: HeartIcon,
+                  title: "Healthcare & Wellness",
+                  description: "Mobile clinics, mental health support, and health education for crisis-affected communities.",
+                  features: ["Mobile Health Clinics", "Mental Health Support", "Health Education Programs"],
+                  image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                  color: "from-red-500 to-pink-500"
+                },
+                {
+                  icon: UsersIcon,
+                  title: "Women Empowerment",
+                  description: "Psychosocial support, business training, and capital for widows and vulnerable women.",
+                  features: ["Psychosocial Support", "Business Training", "Startup Capital"],
+                  image: "https://images.unsplash.com/photo-1529400971008-f566de0e6dfc?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                  color: "from-purple-500 to-violet-500"
+                },
+                {
+                  icon: BookIcon,
+                  title: "Education & Child Protection",
+                  description: "Scholarships, school supplies, and safe learning spaces for affected children.",
+                  features: ["Scholarship Programs", "School Supplies", "Safe Learning Spaces"],
+                  image: "https://images.unsplash.com/photo-1497486751825-1233686d5d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                  color: "from-blue-500 to-cyan-500"
+                }
+              ].map((area, index) => (
+                <CoreAreaCard key={index} {...area} />
+              ))}
             </motion.div>
-            <motion.div className="mt-12" initial={{
-            opacity: 0,
-            y: 20
-          }} whileInView={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            duration: 0.5,
-            delay: 0.3
-          }} viewport={{
-            once: true
-          }}>
-              <Link to="/story" className="inline-flex items-center text-primary font-bold hover:underline text-lg group">
-                Read Our Full Story
-                <ChevronRightIcon className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+            <motion.div 
+              className="mt-12 text-center"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <Link 
+                to="/core-areas"
+                className="inline-flex items-center bg-primary text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-primary/90 transition-colors"
+              >
+                Explore All Core Areas
+                <ArrowRightIcon className="ml-2 w-5 h-5" />
               </Link>
             </motion.div>
           </div>
-        </div>
-      </section>
-        {/* Enhanced Impact Stats with Premium Animations */}
-        <motion.section 
-          ref={statsRef} 
-          className="py-24 bg-gradient-to-br from-tertiary via-white to-gray-50 relative overflow-hidden"
-          initial="hidden"
-          animate={statsControls}
-        >
-          {/* Animated Background Elements */}
-          <div className="absolute inset-0">
+        </section>
+
+        {/* Scholarship Program & Scholars Section */}
+        <section className="py-20 bg-gradient-to-br from-slate-50 via-white to-blue-50">
+          <div className="container mx-auto px-6">
+            {/* Scholarship Program Header */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+              >
+                <div className="mb-6">
+                  <span className="inline-flex items-center px-4 py-2 bg-blue-100 rounded-full text-blue-700 font-heading font-semibold text-sm">
+                    <GraduationCapIcon className="w-4 h-4 mr-2" />
+                    Education Program
+                  </span>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
+                  Ngek Constantine Jumbam <span className="bg-gradient-to-r from-slate-800 via-blue-600 to-blue-700 bg-clip-text text-transparent">Scholarship Fund</span>
+                </h2>
+                <p className="text-xl text-gray-600 mb-6">
+                  Providing full scholarships including tuition, accommodation, mentorship, and mental health support for students affected by the Anglophone crisis.
+                </p>
+                <div className="grid grid-cols-2 gap-4 mb-8">
+                  <div className="text-center p-4 bg-blue-50 rounded-lg">
+                    <div className="text-3xl font-bold text-blue-600">100%</div>
+                    <div className="text-sm text-gray-600">Full Coverage</div>
+                  </div>
+                  <div className="text-center p-4 bg-green-50 rounded-lg">
+                    <div className="text-3xl font-bold text-green-600">24/7</div>
+                    <div className="text-sm text-gray-600">Support Available</div>
+                  </div>
+                </div>
+                <div className="space-x-4">
+                  <Link 
+                    to="/scholarships"
+                    className="inline-flex items-center bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-300"
+                  >
+                    Learn More
+                    <ArrowRightIcon className="ml-2 w-5 h-5" />
+                  </Link>
+                  <Link 
+                    to="/scholars"
+                    className="inline-flex items-center border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 hover:text-white transition-colors"
+                  >
+                    Meet Our Scholars
+                  </Link>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+                className="relative"
+              >
+                <div className="grid grid-cols-2 gap-4">
+                  <img
+                    src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                    alt="Students studying"
+                    className="rounded-lg shadow-lg"
+                  />
+                  <img
+                    src="https://images.unsplash.com/photo-1497486751825-1233686d5d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                    alt="Graduation ceremony"
+                    className="rounded-lg shadow-lg mt-8"
+                  />
+                </div>
+                <div className="absolute -bottom-4 -right-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4 rounded-xl shadow-lg">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold">5</div>
+                    <div className="text-sm">2022 Scholars</div>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Meet Our Scholars Section */}
             <motion.div
-              className="absolute top-20 left-10 w-32 h-32 bg-primary/10 rounded-full blur-xl"
+              className="text-center mb-12"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <h3 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+                Meet Our <span className="text-blue-600">2022 Scholars</span>
+              </h3>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Inspiring stories of resilience, hope, and academic excellence from our first cohort of scholarship recipients.
+              </p>
+            </motion.div>
+
+            {/* Scholars Grid */}
+            <motion.div 
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12"
+              initial="hidden"
+              whileInView="visible"
+              variants={premiumVariants.cardContainer}
+              viewport={{ once: true }}
+            >
+              {[
+                {
+                  name: 'Fadimatou Idrissou',
+                  location: 'Santa, North West',
+                  quote: 'Being a Jumbam scholar means a new breath of fresh air, a ray of light during darkness.',
+                  aspiration: 'Medicine'
+                },
+                {
+                  name: 'Augustin Ateh Mandeh',
+                  location: 'Awing-Santa, North West',
+                  quote: 'Being a Jumbam scholar means working hard to give hope and joy to the less fortunate.',
+                  aspiration: 'Computer Engineering'
+                },
+                {
+                  name: 'Godwill Mbunwe',
+                  location: 'Ntumbaw, North West',
+                  quote: 'Being a Jumbam scholar has brought much joy to me and my mother.',
+                  aspiration: 'Medicine'
+                }
+              ].map((scholar, index) => (
+                <ScholarCard key={index} scholar={scholar} index={index} />
+              ))}
+            </motion.div>
+
+            {/* Nelson Mandela Quote Section */}
+            <motion.div
+              className="bg-gradient-to-br from-slate-800 to-slate-900 text-white p-8 md:p-12 rounded-2xl shadow-2xl text-center mb-12"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <motion.div
+                className="inline-flex items-center justify-center w-16 h-16 bg-blue-500/20 rounded-full mb-6"
+                animate={{
+                  scale: [1, 1.1, 1],
+                  opacity: [0.8, 1, 0.8]
+                }}
+                transition={{ duration: 3, repeat: Infinity }}
+              >
+                <Quote className="w-8 h-8 text-blue-300" />
+              </motion.div>
+              
+              <blockquote className="text-2xl md:text-3xl font-bold text-white mb-6 italic">
+                "Education is the most powerful weapon which you can use to change the world."
+              </blockquote>
+              
+              <cite className="text-lg text-blue-300 font-semibold">
+                - Nelson Mandela
+              </cite>
+            </motion.div>
+
+            {/* Call to Action */}
+            <motion.div 
+              className="text-center"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <Link 
+                to="/scholars"
+                className="inline-flex items-center bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-lg font-bold text-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300"
+              >
+                Meet All Our Scholars
+                <ArrowRightIcon className="ml-2 w-5 h-5" />
+              </Link>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Team & Community Section */}
+        <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
+          <div className="container mx-auto px-6">
+            <SectionTitle 
+              title="Our Community" 
+              subtitle="Meet the people making a difference" 
+              centered 
+            />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              {/* Team Preview */}
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+                className="bg-white rounded-2xl p-8 shadow-lg"
+              >
+                <div className="flex items-center mb-6">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mr-4">
+                    <UsersIcon className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-800">Our Team</h3>
+                    <p className="text-gray-600">Dedicated professionals driving change</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-4 mb-6">
+                  {[1, 2, 3].map((_, index) => (
+                    <div key={index} className="text-center">
+                      <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center mx-auto mb-2">
+                        <span className="text-white font-bold text-lg">
+                          {['JF', 'MK', 'AN'][index]}
+                        </span>
+                      </div>
+                      <div className="text-sm font-semibold text-gray-700">Team Member</div>
+                    </div>
+                  ))}
+                </div>
+                <Link 
+                  to="/team"
+                  className="inline-flex items-center text-primary font-semibold hover:text-primary/80 transition-colors"
+                >
+                  Meet Our Full Team
+                  <ArrowRightIcon className="ml-2 w-4 h-4" />
+                </Link>
+              </motion.div>
+
+              {/* Partners Preview */}
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                viewport={{ once: true }}
+                className="bg-white rounded-2xl p-8 shadow-lg"
+              >
+                <div className="flex items-center mb-6">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mr-4">
+                    <BuildingIcon className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-800">Our Partners</h3>
+                    <p className="text-gray-600">Strategic alliances for greater impact</p>
+                  </div>
+                </div>
+                <div className="space-y-4 mb-6">
+                  {[
+                    { name: "University of Notre Dame", type: "Academic Partner" },
+                    { name: "Open Dreams", type: "Strategic Partner" },
+                    { name: "Local NGOs", type: "Community Partners" }
+                  ].map((partner, index) => (
+                    <div key={index} className="flex items-center p-3 bg-gray-50 rounded-lg">
+                      <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center mr-3">
+                        <Star className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <div className="font-semibold text-gray-800">{partner.name}</div>
+                        <div className="text-sm text-gray-600">{partner.type}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <Link 
+                  to="/partners"
+                  className="inline-flex items-center text-primary font-semibold hover:text-primary/80 transition-colors"
+                >
+                  View All Partners
+                  <ArrowRightIcon className="ml-2 w-4 h-4" />
+                </Link>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* Impact Statistics */}
+        <section className="py-20 bg-gradient-to-br from-blue-900 via-blue-800 to-slate-900 text-white relative overflow-hidden">
+          {/* Animated Background Elements */}
+          <div className="absolute inset-0 opacity-10">
+            <motion.div
+              className="absolute top-20 left-10 w-32 h-32 bg-blue-400 rounded-full blur-xl"
               animate={{
                 scale: [1, 1.2, 1],
                 opacity: [0.3, 0.6, 0.3]
@@ -719,7 +926,7 @@ export const Home: React.FC = () => {
               transition={{ duration: 4, repeat: Infinity }}
             />
             <motion.div
-              className="absolute bottom-20 right-10 w-24 h-24 bg-accent/15 rounded-full blur-xl"
+              className="absolute bottom-20 right-10 w-24 h-24 bg-slate-400 rounded-full blur-xl"
               animate={{
                 scale: [1.2, 1, 1.2],
                 opacity: [0.4, 0.7, 0.4]
@@ -727,72 +934,65 @@ export const Home: React.FC = () => {
               transition={{ duration: 3, repeat: Infinity, delay: 1 }}
             />
           </div>
-
           <div className="container mx-auto px-6 relative z-10">
             <motion.div
               className="text-center mb-16"
-              variants={premiumVariants.heroContent}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
             >
               <motion.div
-                className="inline-flex items-center px-4 py-2 bg-primary/10 backdrop-blur-sm rounded-full text-primary font-heading font-semibold text-sm border border-primary/20 mb-6"
-                variants={premiumVariants.textReveal}
+                className="inline-flex items-center px-4 py-2 bg-blue-500/20 backdrop-blur-sm rounded-full text-blue-300 font-heading font-semibold text-sm border border-blue-400/30 mb-6"
               >
                 <BarChart3Icon className="w-4 h-4 mr-2" />
                 Real Impact Numbers
               </motion.div>
               
-              <motion.h2 
-                className="text-4xl md:text-5xl font-bold text-gray-800 mb-4"
-                variants={premiumVariants.textReveal}
-              >
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
                 Transforming Lives Through
-                <span className="text-primary"> Measurable Impact</span>
-              </motion.h2>
+                <span className="text-blue-300"> Measurable Impact</span>
+              </h2>
               
-              <motion.p 
-                className="text-xl text-gray-600 max-w-3xl mx-auto"
-                variants={premiumVariants.textReveal}
-              >
+              <p className="text-xl text-white/90 max-w-3xl mx-auto">
                 Every statistic represents a life changed, a family restored, and hope renewed in our communities.
-              </motion.p>
+              </p>
             </motion.div>
-
             <motion.div 
               className="grid grid-cols-1 md:grid-cols-4 gap-8"
+              initial="hidden"
+              whileInView="visible"
               variants={premiumVariants.cardContainer}
+              viewport={{ once: true }}
             >
               {[
                 { 
                   icon: UsersIcon, 
                   number: "50+", 
                   label: "Widows Empowered", 
-                  description: "Through our comprehensive support programs",
-                  color: "from-blue-500 to-cyan-500",
-                  delay: 0.1 
+                  description: "Women receiving support",
+                  color: "from-blue-500 to-cyan-500"
                 },
                 { 
-                  icon: HeartIcon, 
+                  icon: TrendingUpIcon, 
                   number: "17", 
                   label: "Businesses Started", 
-                  description: "New enterprises launched in 2023",
-                  color: "from-red-500 to-pink-500",
-                  delay: 0.3 
+                  description: "New enterprises in 2023",
+                  color: "from-green-500 to-emerald-500"
                 },
                 { 
-                  icon: TargetIcon, 
+                  icon: HandIcon, 
                   number: "5.5M", 
                   label: "FCFA Distributed", 
                   description: "In capital and support",
-                  color: "from-green-500 to-emerald-500",
-                  delay: 0.5 
+                  color: "from-purple-500 to-violet-500"
                 },
                 { 
-                  icon: BarChart3Icon, 
+                  icon: TargetIcon, 
                   number: "100%", 
-                  label: "Reintegration Rate", 
-                  description: "Success rate in community reintegration",
-                  color: "from-purple-500 to-violet-500",
-                  delay: 0.7 
+                  label: "Success Rate", 
+                  description: "Community reintegration",
+                  color: "from-orange-500 to-red-500"
                 }
               ].map((stat, index) => (
                 <motion.div
@@ -803,10 +1003,10 @@ export const Home: React.FC = () => {
                   onHoverStart={() => setHoveredCard(index)}
                   onHoverEnd={() => setHoveredCard(null)}
                 >
-                  <div className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl border border-gray-200/50 shadow-lg hover:shadow-2xl transition-all duration-500 relative overflow-hidden">
+                  <div className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20 shadow-lg hover:shadow-2xl transition-all duration-500 relative overflow-hidden">
                     {/* Gradient Background on Hover */}
                     <motion.div
-                      className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}
+                      className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
                     />
                     
                     {/* Icon with Animation */}
@@ -822,25 +1022,15 @@ export const Home: React.FC = () => {
                       }}
                     >
                       <stat.icon className="w-8 h-8 text-white" />
-                      
-                      {/* Pulse Effect */}
-                      <motion.div
-                        className={`absolute inset-0 bg-gradient-to-br ${stat.color} rounded-2xl`}
-                        animate={hoveredCard === index ? {
-                          scale: [1, 1.2, 1],
-                          opacity: [0.5, 0.8, 0.5]
-                        } : {}}
-                        transition={{ duration: 1, repeat: Infinity }}
-                      />
                     </motion.div>
 
                     {/* Animated Number */}
                     <motion.div 
-                      className="text-4xl md:text-5xl font-bold text-gray-800 mb-2"
+                      className="text-4xl md:text-5xl font-bold text-white mb-2"
                       initial={{ scale: 0.5, opacity: 0 }}
                       whileInView={{ scale: 1, opacity: 1 }}
                       transition={{ 
-                        delay: stat.delay,
+                        delay: index * 0.1,
                         duration: 0.8,
                         type: "spring",
                         stiffness: 200
@@ -850,11 +1040,11 @@ export const Home: React.FC = () => {
                       {stat.number}
                     </motion.div>
 
-                    <h3 className="text-xl font-bold text-gray-700 mb-3">
+                    <h3 className="text-xl font-bold text-white/90 mb-3">
                       {stat.label}
                     </h3>
                     
-                    <p className="text-gray-600 leading-relaxed">
+                    <p className="text-white/70 leading-relaxed">
                       {stat.description}
                     </p>
 
@@ -872,7 +1062,7 @@ export const Home: React.FC = () => {
                           exit={{ scale: 0, opacity: 0 }}
                           transition={{ duration: 0.6 }}
                         >
-                          <Sparkles className="w-6 h-6 text-primary" />
+                          <Sparkles className="w-6 h-6 text-blue-300" />
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -880,7 +1070,6 @@ export const Home: React.FC = () => {
                 </motion.div>
               ))}
             </motion.div>
-
             <motion.div 
               className="mt-16 text-center"
               initial={{ opacity: 0, y: 30 }}
@@ -890,7 +1079,7 @@ export const Home: React.FC = () => {
             >
               <Link 
                 to="/impact"
-                className="group inline-flex items-center bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white py-4 px-8 rounded-xl transition-all duration-300 font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105"
+                className="group inline-flex items-center bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-cyan-500 hover:to-blue-500 text-white py-4 px-8 rounded-xl transition-all duration-300 font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 <span className="mr-3">See Our Full Impact</span>
                 <motion.div
@@ -902,457 +1091,383 @@ export const Home: React.FC = () => {
               </Link>
             </motion.div>
           </div>
-        </motion.section>
-        {/* Enhanced Core Areas Preview */}
-        <motion.section 
-          ref={areasRef} 
-          className="py-24 bg-white relative overflow-hidden"
-          initial="hidden"
-          animate={areasControls}
-        >
-          <div className="container mx-auto px-6">
-            <motion.div
-              className="text-center mb-16"
-              variants={premiumVariants.heroContent}
-            >
-              <motion.div
-                className="inline-flex items-center px-4 py-2 bg-primary/10 backdrop-blur-sm rounded-full text-primary font-heading font-semibold text-sm border border-primary/20 mb-6"
-                variants={premiumVariants.textReveal}
-              >
-                <HandIcon className="w-4 h-4 mr-2" />
-                Our Core Focus Areas
-              </motion.div>
-              
-              <motion.h2 
-                className="text-4xl md:text-5xl font-bold text-gray-800 mb-4"
-                variants={premiumVariants.textReveal}
-              >
-                Comprehensive Support for
-                <span className="text-primary"> Lasting Change</span>
-              </motion.h2>
-            </motion.div>
+        </section>
 
+        {/* Crisis Context Section */}
+        <section className="py-20 bg-secondary text-white">
+          <div className="container mx-auto px-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+              >
+                <div className="mb-6">
+                  <span className="inline-flex items-center px-4 py-2 bg-red-500/20 rounded-full text-red-300 font-heading font-semibold text-sm">
+                    <AlertTriangleIcon className="w-4 h-4 mr-2" />
+                    Crisis Context
+                  </span>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                  Understanding the <span className="text-primary">Anglophone Crisis</span>
+                </h2>
+                <p className="text-xl text-white/90 mb-6">
+                  The ongoing conflict in Cameroon's Northwest and Southwest regions has devastated communities, displaced families, and disrupted essential services.
+                </p>
+                <div className="grid grid-cols-3 gap-4 mb-8">
+                  <div className="text-center p-4 bg-white/10 rounded-lg">
+                    <div className="text-3xl font-bold text-primary">4,000+</div>
+                    <div className="text-sm text-white/80">Lives Lost</div>
+                  </div>
+                  <div className="text-center p-4 bg-white/10 rounded-lg">
+                    <div className="text-3xl font-bold text-primary">700K+</div>
+                    <div className="text-sm text-white/80">Displaced</div>
+                  </div>
+                  <div className="text-center p-4 bg-white/10 rounded-lg">
+                    <div className="text-3xl font-bold text-primary">80%</div>
+                    <div className="text-sm text-white/80">Schools Closed</div>
+                  </div>
+                </div>
+                <Link 
+                  to="/crisis"
+                  className="inline-flex items-center bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+                >
+                  Learn About the Crisis
+                  <ArrowRightIcon className="ml-2 w-5 h-5" />
+                </Link>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+                className="relative"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1580060839134-75a5edca2e99?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                  alt="Cameroon map"
+                  className="rounded-lg shadow-lg w-full"
+                />
+                <div className="absolute top-1/3 left-1/3 w-4 h-4 bg-primary rounded-full animate-ping"></div>
+                <div className="absolute top-1/2 left-1/4 w-4 h-4 bg-primary rounded-full animate-ping animation-delay-300"></div>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* News & Updates Section */}
+        <section className="py-20 bg-gray-50">
+          <div className="container mx-auto px-6">
+            <SectionTitle 
+              title="Latest News & Updates" 
+              subtitle="Stay informed about our latest developments" 
+              centered 
+            />
             <motion.div 
               className="grid grid-cols-1 md:grid-cols-3 gap-8"
+              initial="hidden"
+              whileInView="visible"
               variants={premiumVariants.cardContainer}
+              viewport={{ once: true }}
             >
-              <EnhancedCoreAreaCard icon={<HeartIcon className="h-8 w-8" />} title="Health" description="Essential healthcare services and mental health support for crisis-affected communities." image="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" features={['Mobile health clinics', 'Mental health support', 'Health education']} link="/core-areas" />
-              <EnhancedCoreAreaCard icon={<UsersIcon className="h-8 w-8" />} title="Women Empowerment" description="Psychosocial support, business training, and capital for widows and vulnerable women." image="https://images.unsplash.com/photo-1529400971008-f566de0e6dfc?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" features={['Psychosocial support', 'Business training', 'Startup capital']} link="/core-areas" />
-              <EnhancedCoreAreaCard icon={<BookIcon className="h-8 w-8" />} title="Education" description="Scholarships, school supplies, and safe learning spaces for affected children." image="https://images.unsplash.com/photo-1497486751825-1233686d5d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" features={['Scholarships', 'School supplies', 'Safe learning spaces']} link="/core-areas" />
+              {[
+                {
+                  title: "Women's Empowerment Program Expansion",
+                  date: "March 15, 2024",
+                  image: "https://images.unsplash.com/photo-1529400971008-f566de0e6dfc?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                  excerpt: "Our women's empowerment program reaches 50 new beneficiaries..."
+                },
+                {
+                  title: "New Partnership with Notre Dame",
+                  date: "February 28, 2024",
+                  image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                  excerpt: "Strategic partnership opens new opportunities for scholarships..."
+                },
+                {
+                  title: "Mobile Health Clinic Launch",
+                  date: "January 20, 2024",
+                  image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                  excerpt: "First mobile health clinic begins serving remote communities..."
+                }
+              ].map((article, index) => (
+                <NewsCard key={index} {...article} />
+              ))}
             </motion.div>
-          </div>
-        </motion.section>
-      {/* Crisis Awareness Section */}
-      <section className="py-20 bg-secondary text-white relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          backgroundSize: '60px 60px'
-        }} />
-        </div>
-        <div className="container mx-auto px-6 relative z-10">
-          <SectionTitle title="The Anglophone Crisis" subtitle="Understanding the context of our work" centered light />
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <motion.div initial={{
-            opacity: 0,
-            x: -30
-          }} whileInView={{
-            opacity: 1,
-            x: 0
-          }} transition={{
-            duration: 0.6
-          }} viewport={{
-            once: true
-          }}>
-              <h3 className="font-heading text-2xl font-bold mb-4">
-                A Humanitarian Challenge
-              </h3>
-              <p className="font-heading text-white/80 mb-6">
-                The Anglophone Crisis in Cameroon is an ongoing conflict in the
-                Northwest and Southwest regions, where the country's Anglophone
-                minority has been fighting for greater autonomy or independence
-                from the majority Francophone government.
-              </p>
-              <p className="font-heading text-white/80 mb-8">
-                This crisis has had devastating effects with thousands killed,
-                hundreds of thousands displaced, and significant disruptions to
-                education, healthcare, and economic activities.
-              </p>
-              <div className="grid grid-cols-3 gap-4 mb-8">
-                <div className="bg-white/10 p-4 rounded-lg text-center">
-                  <div className="text-primary font-heading text-3xl font-bold">
-                    4,000+
-                  </div>
-                  <div className="font-heading text-sm">Lives Lost</div>
-                </div>
-                <div className="bg-white/10 p-4 rounded-lg text-center">
-                  <div className="text-primary font-heading text-3xl font-bold">
-                    700K+
-                  </div>
-                  <div className="font-heading text-sm">Displaced</div>
-                </div>
-                <div className="bg-white/10 p-4 rounded-lg text-center">
-                  <div className="text-primary font-heading text-3xl font-bold">
-                    80%
-                  </div>
-                  <div className="font-heading text-sm">Schools Closed</div>
-                </div>
-              </div>
-              <Link to="/crisis" className="inline-flex items-center bg-primary hover:bg-primary/90 text-secondary py-3 px-6 rounded-md transition-all hover:scale-105 font-bold">
-                Learn About the Crisis
-                <ArrowRightIcon className="ml-2 h-5 w-5" />
-              </Link>
-            </motion.div>
-            <motion.div initial={{
-            opacity: 0,
-            scale: 0.9
-          }} whileInView={{
-            opacity: 1,
-            scale: 1
-          }} transition={{
-            duration: 0.6,
-            delay: 0.2
-          }} viewport={{
-            once: true
-          }} className="relative">
-              <img src="https://images.unsplash.com/photo-1580060839134-75a5edca2e99?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Map of Cameroon highlighting the Anglophone regions" className="rounded-lg shadow-lg w-full" />
-              <div className="absolute top-1/3 left-1/3 animate-ping">
-                <div className="h-4 w-4 bg-primary rounded-full"></div>
-              </div>
-              <div className="absolute top-1/2 left-1/4 animate-ping animation-delay-300">
-                <div className="h-4 w-4 bg-primary rounded-full"></div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-      {/* Latest News Section */}
-      <section ref={impactRef} className="py-20 bg-tertiary">
-        <div className="container mx-auto px-6">
-          <SectionTitle title="Latest News & Stories" subtitle="Updates from our work and impact" centered />
-          <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-8" initial="hidden" animate={impactControls} variants={staggerContainer}>
-            <NewsCard title="Jumbam Family Foundation Expands Women's Empowerment Program" date="March 15, 2023" image="https://images.unsplash.com/photo-1529400971008-f566de0e6dfc?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" source="AllAfrica" />
-            <NewsCard title="New Health Initiative Launched in Crisis-Affected Communities" date="January 22, 2023" image="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" source="Cameroon Tribune" />
-            <NewsCard title="Jumbam Foundation Founder Recognized by Harvard University" date="November 10, 2022" image="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" source="Harvard Gazette" />
-          </motion.div>
-          <motion.div className="mt-10 text-center" initial={{
-          opacity: 0,
-          y: 20
-        }} whileInView={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          duration: 0.5,
-          delay: 0.5
-        }} viewport={{
-          once: true
-        }}>
-            <Link to="/news" className="inline-flex items-center text-primary font-bold hover:underline text-lg group">
-              View All News & Stories
-              <ChevronRightIcon className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-            </Link>
-          </motion.div>
-        </div>
-      </section>
-      {/* Partners Section with Enhanced Animation */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-6">
-          <SectionTitle title="Our Partners" subtitle="Working together for greater impact" centered />
-          <motion.div className="grid grid-cols-2 md:grid-cols-4 gap-6" initial="hidden" whileInView="visible" variants={staggerContainer} viewport={{
-          once: true,
-          amount: 0.3
-        }}>
-            <PartnerLogo name="Harvard University" />
-            <PartnerLogo name="UN Women" />
-            <PartnerLogo name="World Bank" />
-            <PartnerLogo name="USAID" />
-          </motion.div>
-        </div>
-      </section>
-      {/* Call to Action */}
-      <section className="py-20 bg-primary/10">
-        <div className="container mx-auto px-6">
-          <div className="max-w-4xl mx-auto text-center">
-            <motion.h2 className="font-heading text-4xl md:text-5xl font-bold mb-6 text-secondary" initial={{
-            opacity: 0,
-            y: 20
-          }} whileInView={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            duration: 0.5
-          }} viewport={{
-            once: true
-          }}>
-              Join Us in Restoring Hope
-            </motion.h2>
-            <motion.p className="font-heading text-xl mb-10 text-secondary/80" initial={{
-            opacity: 0,
-            y: 20
-          }} whileInView={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            duration: 0.5,
-            delay: 0.2
-          }} viewport={{
-            once: true
-          }}>
-              Together, we can transform tragedy into hope and create lasting
-              positive change for the people of Cameroon.
-            </motion.p>
-            <motion.div className="flex flex-col sm:flex-row gap-4 justify-center" initial={{
-            opacity: 0,
-            y: 20
-          }} whileInView={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            duration: 0.5,
-            delay: 0.4
-          }} viewport={{
-            once: true
-          }}>
-              <Link to="/donate" className="bg-primary hover:bg-primary/90 text-secondary px-8 py-4 rounded-md font-bold text-lg transition-all hover:scale-105 flex items-center justify-center">
-                Donate Now
-                <HeartIcon className="ml-2 h-5 w-5" />
-              </Link>
-              <Link to="/contact" className="border-2 border-secondary text-secondary hover:bg-secondary hover:text-white px-8 py-4 rounded-md font-bold text-lg transition-all hover:scale-105 flex items-center justify-center">
-                Get Involved
-                <UsersIcon className="ml-2 h-5 w-5" />
+            <motion.div 
+              className="mt-12 text-center"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <Link 
+                to="/news"
+                className="inline-flex items-center bg-primary text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-primary/90 transition-colors"
+              >
+                Read All News & Stories
+                <ArrowRightIcon className="ml-2 w-5 h-5" />
               </Link>
             </motion.div>
           </div>
-        </div>
-      </section>
-    </div>
+        </section>
+
+        {/* Donation Section */}
+        <section className="py-20 bg-white">
+          <div className="container mx-auto px-6">
+            <div className="max-w-4xl mx-auto text-center">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+              >
+                <div className="mb-6">
+                  <span className="inline-flex items-center px-4 py-2 bg-green-100 rounded-full text-green-700 font-heading font-semibold text-sm">
+                    <HeartIcon className="w-4 h-4 mr-2" />
+                    Make a Difference
+                  </span>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
+                  Support Our <span className="text-primary">Mission</span>
+                </h2>
+                <p className="text-xl text-gray-600 mb-8">
+                  Your donation directly impacts lives. Every contribution helps us restore hope and build a better future for Cameroon.
+                </p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                  {[
+                    { icon: CreditCardIcon, title: "Online Donation", description: "Secure credit card payments" },
+                    { icon: SmartphoneIcon, title: "Mobile Money", description: "MTN MoMo: +237 671-196-020" },
+                    { icon: PhoneIcon, title: "Direct Contact", description: "Personal assistance available" }
+                  ].map((method, index) => (
+                    <motion.div
+                      key={index}
+                      className="p-6 border border-gray-200 rounded-lg hover:border-primary transition-colors"
+                      whileHover={{ scale: 1.05 }}
+                    >
+                      <method.icon className="w-8 h-8 text-primary mx-auto mb-3" />
+                      <h3 className="font-semibold text-gray-800 mb-2">{method.title}</h3>
+                      <p className="text-gray-600 text-sm">{method.description}</p>
+                    </motion.div>
+                  ))}
+                </div>
+
+                <div className="space-x-4">
+                  <Link 
+                    to="/donate"
+                    className="inline-flex items-center bg-primary text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-primary/90 transition-colors"
+                  >
+                    Donate Now
+                    <HeartIcon className="ml-2 w-5 h-5" />
+                  </Link>
+                  <Link 
+                    to="/contact"
+                    className="inline-flex items-center border-2 border-primary text-primary px-8 py-4 rounded-lg font-bold text-lg hover:bg-primary hover:text-white transition-colors"
+                  >
+                    Get Involved
+                    <UsersIcon className="ml-2 w-5 h-5" />
+                  </Link>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* Contact Preview Section */}
+        <section className="py-20 bg-gradient-to-br from-primary to-accent text-white">
+          <div className="container mx-auto px-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+              >
+                <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                  Ready to Make a <span className="text-secondary">Difference?</span>
+                </h2>
+                <p className="text-xl text-white/90 mb-8">
+                  Join us in our mission to restore hope and transform lives in Cameroon. Every action counts, every donation matters.
+                </p>
+                <div className="space-y-4">
+                  {[
+                    { icon: MailIcon, text: "jumbamfamilyfoundation@gmail.com" },
+                    { icon: PhoneIcon, text: "(+237) 691-51-32-45" },
+                    { icon: MapPinIcon, text: "North West Region, Cameroon" }
+                  ].map((contact, index) => (
+                    <motion.div
+                      key={index}
+                      className="flex items-center space-x-3"
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1, duration: 0.6 }}
+                      viewport={{ once: true }}
+                    >
+                      <contact.icon className="w-5 h-5 text-white/80" />
+                      <span className="text-white/90">{contact.text}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+                className="bg-white/10 backdrop-blur-sm rounded-2xl p-8"
+              >
+                <h3 className="text-2xl font-bold mb-6">Quick Contact</h3>
+                <div className="space-y-4">
+                  <input
+                    type="text"
+                    placeholder="Your Name"
+                    className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:border-white"
+                  />
+                  <input
+                    type="email"
+                    placeholder="Your Email"
+                    className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:border-white"
+                  />
+                  <textarea
+                    placeholder="Your Message"
+                    rows={4}
+                    className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:border-white resize-none"
+                  />
+                  <Link
+                    to="/contact"
+                    className="w-full bg-secondary text-primary py-3 rounded-lg font-bold text-center block hover:bg-secondary/90 transition-colors"
+                  >
+                    Send Message
+                  </Link>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+      </div>
     </>
   );
 };
-// Component for mission cards
-interface MissionCardProps {
-  icon: React.ReactNode;
+
+// Component Definitions
+interface CoreAreaCardProps {
+  icon: React.ComponentType<any>;
   title: string;
   description: string;
-}
-const MissionCard: React.FC<MissionCardProps> = ({
-  icon,
-  title,
-  description
-}) => {
-  return <motion.div className="bg-tertiary p-6 rounded-lg text-center" variants={{
-    hidden: {
-      opacity: 0,
-      y: 20
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5
-      }
-    }
-  }}>
-      <div className="bg-primary/10 p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 text-primary">
-        {icon}
-      </div>
-      <h3 className="font-heading text-xl font-bold mb-3 text-secondary">
-        {title}
-      </h3>
-      <p className="text-secondary/80">{description}</p>
-    </motion.div>;
-};
-// Enhanced version of the StatCard component with animations
-interface StatCardProps {
-  icon: React.ReactNode;
-  number: string;
-  label: string;
-  description: string;
-  delay?: number;
-}
-const StatCard: React.FC<StatCardProps> = ({
-  icon,
-  number,
-  label,
-  description,
-  delay = 0
-}) => {
-  return <motion.div className="text-center p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow" variants={{
-    hidden: {
-      opacity: 0,
-      y: 30
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        delay
-      }
-    }
-  }}>
-      <div className="flex justify-center mb-4">
-        <div className="p-3 bg-primary/10 rounded-full text-primary">
-          {icon}
-        </div>
-      </div>
-      <motion.div className="font-heading text-4xl font-bold text-secondary mb-2" initial={{
-      scale: 0.5,
-      opacity: 0
-    }} whileInView={{
-      scale: 1,
-      opacity: 1
-    }} transition={{
-      duration: 0.5,
-      delay: delay + 0.3,
-      type: 'spring',
-      stiffness: 100
-    }} viewport={{
-      once: true
-    }}>
-        {number}
-      </motion.div>
-      <div className="font-heading text-xl font-bold text-secondary mb-2">
-        {label}
-      </div>
-      <div className="font-heading text-secondary/70">{description}</div>
-    </motion.div>;
-};
-// Enhanced Core Area Card with features list
-interface EnhancedCoreAreaCardProps {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  image: string;
   features: string[];
-  link: string;
+  image: string;
+  color: string;
 }
-const EnhancedCoreAreaCard: React.FC<EnhancedCoreAreaCardProps> = ({
-  icon,
-  title,
-  description,
-  image,
-  features,
-  link
-}) => {
+
+const CoreAreaCard: React.FC<CoreAreaCardProps> = ({ icon: Icon, title, description, features, image, color }) => {
   const [isHovered, setIsHovered] = useState(false);
-  return <motion.div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow relative" variants={{
-    hidden: {
-      opacity: 0,
-      y: 30
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6
-      }
-    }
-  }} onHoverStart={() => setIsHovered(true)} onHoverEnd={() => setIsHovered(false)}>
-      <div className="relative overflow-hidden h-48">
-        <motion.img src={image} alt={title} className="w-full h-full object-cover" animate={{
-        scale: isHovered ? 1.05 : 1
-      }} transition={{
-        duration: 0.5
-      }} />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-        <div className="absolute top-4 left-4 p-2 bg-primary rounded-full text-secondary">
-          {icon}
-        </div>
+
+  return (
+    <motion.div
+      className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500"
+      variants={{
+        hidden: { opacity: 0, y: 50 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+      }}
+      whileHover={{ y: -8 }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+    >
+      <div className="relative h-48 overflow-hidden">
+        <motion.img
+          src={image}
+          alt={title}
+          className="w-full h-full object-cover"
+          animate={{ scale: isHovered ? 1.1 : 1 }}
+          transition={{ duration: 0.5 }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+        <motion.div
+          className={`absolute top-4 left-4 w-12 h-12 bg-gradient-to-br ${color} rounded-full flex items-center justify-center`}
+          whileHover={{ scale: 1.1, rotate: 10 }}
+        >
+          <Icon className="w-6 h-6 text-white" />
+        </motion.div>
       </div>
+      
       <div className="p-6">
-        <h3 className="font-heading text-xl font-bold mb-3">{title}</h3>
-        <p className="font-heading text-secondary/80 mb-4">{description}</p>
-        <div className="mb-4">
-          {features.map((feature, index) => <div key={index} className="flex items-center mb-2">
-              <CheckIcon className="h-4 w-4 text-primary mr-2" />
-              <span className="font-heading text-sm">{feature}</span>
-            </div>)}
+        <h3 className="text-xl font-bold text-gray-800 mb-3">{title}</h3>
+        <p className="text-gray-600 mb-4 leading-relaxed">{description}</p>
+        
+        <div className="space-y-2 mb-6">
+          {features.map((feature, index) => (
+            <motion.div
+              key={index}
+              className="flex items-center space-x-2"
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <CheckIcon className="w-4 h-4 text-green-500" />
+              <span className="text-sm text-gray-600">{feature}</span>
+            </motion.div>
+          ))}
         </div>
-        <Link to={link} className="text-primary font-medium hover:underline inline-flex items-center group">
+        
+        <Link
+          to="/core-areas"
+          className="inline-flex items-center text-primary font-semibold hover:text-primary/80 transition-colors group"
+        >
           Learn More
-          <ChevronRightIcon className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
+          <ChevronRightIcon className="ml-1 w-4 h-4 transition-transform group-hover:translate-x-1" />
         </Link>
       </div>
-    </motion.div>;
+    </motion.div>
+  );
 };
-// News Card Component
+
 interface NewsCardProps {
   title: string;
   date: string;
   image: string;
-  source: string;
+  excerpt: string;
 }
-const NewsCard: React.FC<NewsCardProps> = ({
-  title,
-  date,
-  image,
-  source
-}) => {
-  return <motion.div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow" variants={{
-    hidden: {
-      opacity: 0,
-      y: 30
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6
-      }
-    }
-  }}>
-      <div className="relative overflow-hidden h-48">
-        <motion.img src={image} alt={title} className="w-full h-full object-cover" whileHover={{
-        scale: 1.05
-      }} transition={{
-        duration: 0.5
-      }} />
+
+const NewsCard: React.FC<NewsCardProps> = ({ title, date, image, excerpt }) => {
+  return (
+    <motion.div
+      className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300"
+      variants={{
+        hidden: { opacity: 0, y: 50 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+      }}
+      whileHover={{ y: -5 }}
+    >
+      <div className="relative h-48 overflow-hidden">
+        <motion.img
+          src={image}
+          alt={title}
+          className="w-full h-full object-cover"
+          whileHover={{ scale: 1.05 }}
+          transition={{ duration: 0.5 }}
+        />
       </div>
+      
       <div className="p-6">
-        <div className="flex items-center font-heading text-sm text-dark/60 mb-2">
-          <CalendarIcon className="h-4 w-4 mr-1" />
-          <span>{date}</span>
-          <span className="mx-2">•</span>
-          <span>{source}</span>
+        <div className="flex items-center text-sm text-gray-500 mb-3">
+          <CalendarIcon className="w-4 h-4 mr-1" />
+          {date}
         </div>
-        <h3 className="font-heading text-xl font-bold mb-4">{title}</h3>
-        <Link to="/news" className="text-primary font-medium hover:underline inline-flex items-center group">
+        
+        <h3 className="text-xl font-bold text-gray-800 mb-3 leading-tight">{title}</h3>
+        <p className="text-gray-600 mb-4 leading-relaxed">{excerpt}</p>
+        
+        <Link
+          to="/news"
+          className="inline-flex items-center text-primary font-semibold hover:text-primary/80 transition-colors group"
+        >
           Read Full Article
-          <ChevronRightIcon className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
+          <ChevronRightIcon className="ml-1 w-4 h-4 transition-transform group-hover:translate-x-1" />
         </Link>
       </div>
-    </motion.div>;
-};
-// Partner Logo Component
-interface PartnerLogoProps {
-  name: string;
-}
-const PartnerLogo: React.FC<PartnerLogoProps> = ({
-  name
-}) => {
-  const scaleIn = {
-    hidden: {
-      scale: 0.8,
-      opacity: 0
-    },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      transition: {
-        type: 'spring',
-        stiffness: 100
-      }
-    }
-  };
-  return <motion.div className="flex items-center justify-center p-4" variants={scaleIn} whileHover={{
-    scale: 1.05
-  }}>
-      <div className="bg-white p-4 rounded-lg shadow-md w-full h-20 flex items-center justify-center">
-        <span className="font-heading font-bold text-secondary text-lg">
-          {name}
-        </span>
-      </div>
-    </motion.div>;
+    </motion.div>
+  );
 };
