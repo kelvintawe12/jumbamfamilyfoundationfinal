@@ -188,8 +188,8 @@ export const News: React.FC = () => {
         >
           <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="font-heading text-3xl font-bold text-secondary flex items-center">
-                <AlertTriangleIcon className="mr-3 text-red-600" size={32} />
+              <h2 className="font-sans text-2xl font-semibold text-gray-800 tracking-wide flex items-center">
+                <AlertTriangleIcon className="mr-3 text-red-600" size={28} />
                 About the Anglophone Crisis
               </h2>
               <button
@@ -290,8 +290,8 @@ export const News: React.FC = () => {
         >
           <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="font-heading text-3xl font-bold text-secondary flex items-center">
-                <BookOpenIcon className="mr-3 text-blue-600" size={32} />
+              <h2 className="font-sans text-2xl font-semibold text-gray-800 tracking-wide flex items-center">
+                <BookOpenIcon className="mr-3 text-blue-600" size={28} />
                 Crisis Timeline
               </h2>
               <button
