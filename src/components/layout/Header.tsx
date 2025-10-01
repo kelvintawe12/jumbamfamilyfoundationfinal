@@ -1,16 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
-import { Menu, X, Heart, Sparkles, Star } from 'lucide-react';
+import { Menu, X, Heart, Sparkles, Star, ChevronDown, Users, GraduationCap, Building, BookOpen, HeartHandshake, Phone } from 'lucide-react';
 
 interface HeaderProps {
   scrolled: boolean;
+}
+
+interface SubNavItem {
+  path: string;
+  label: string;
+  description?: string;
+  icon?: React.ReactNode;
+}
+
+interface NavItem {
+  path?: string;
+  label: string;
+  subItems?: SubNavItem[];
+  icon?: React.ReactNode;
 }
 
 export const Header: React.FC<HeaderProps> = ({ scrolled }) => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [hoveredNav, setHoveredNav] = useState<string | null>(null);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   
   // Enhanced scroll animations
   const { scrollY } = useScroll();
@@ -20,19 +35,19 @@ export const Header: React.FC<HeaderProps> = ({ scrolled }) => {
   useEffect(() => {
     // Close mobile menu when changing routes
     setMobileMenuOpen(false);
+    setActiveDropdown(null);
   }, [location.pathname]);
 
   // Body scroll lock effect
   useEffect(() => {
     if (mobileMenuOpen) {
       document.body.style.overflow = 'hidden';
-      document.body.style.paddingRight = '0px'; // Prevent layout shift
+      document.body.style.paddingRight = '0px';
     } else {
       document.body.style.overflow = 'unset';
       document.body.style.paddingRight = 'unset';
     }
 
-    // Cleanup on unmount
     return () => {
       document.body.style.overflow = 'unset';
       document.body.style.paddingRight = 'unset';
@@ -42,6 +57,102 @@ export const Header: React.FC<HeaderProps> = ({ scrolled }) => {
   const isActive = (path: string) => {
     return location.pathname === path;
   };
+
+  const isActiveGroup = (subItems: SubNavItem[]) => {
+    return subItems.some(item => location.pathname === item.path);
+  };
+
+  // Organized navigation structure
+  const navigation: NavItem[] = [
+    { 
+      path: '/', 
+      label: 'Home',
+      icon: <BookOpen size={16} />
+    },
+    {
+      label: 'About Us',
+      icon: <Users size={16} />,
+      subItems: [
+        { 
+          path: '/story', 
+          label: 'Our Story', 
+          description: 'Learn about our mission and history',
+          icon: <BookOpen size={14} />
+        },
+        { 
+          path: '/model', 
+          label: 'Our Model', 
+          description: 'How we create lasting impact',
+          icon: <Building size={14} />
+        },
+        { 
+          path: '/impact', 
+          label: 'Our Impact', 
+          description: 'Measurable results we\'ve achieved',
+          icon: <Star size={14} />
+        },
+        { 
+          path: '/crisis', 
+          label: 'Crisis Response', 
+          description: 'Our emergency support initiatives',
+          icon: <HeartHandshake size={14} />
+        }
+      ]
+    },
+    {
+      label: 'Programs',
+      icon: <GraduationCap size={16} />,
+      subItems: [
+        { 
+          path: '/core-areas', 
+          label: 'Core Areas', 
+          description: 'Our main focus areas of work',
+          icon: <Building size={14} />
+        },
+        { 
+          path: '/scholarships', 
+          label: 'Scholarships', 
+          description: 'Educational support programs',
+          icon: <GraduationCap size={14} />
+        },
+        { 
+          path: '/scholars', 
+          label: 'Our Scholars', 
+          description: 'Meet our scholarship recipients',
+          icon: <Users size={14} />
+        }
+      ]
+    },
+    {
+      label: 'Community',
+      icon: <Users size={16} />,
+      subItems: [
+        { 
+          path: '/team', 
+          label: 'Our Team', 
+          description: 'Meet the people behind our mission',
+          icon: <Users size={14} />
+        },
+        { 
+          path: '/partners', 
+          label: 'Partners', 
+          description: 'Organizations working with us',
+          icon: <Building size={14} />
+        },
+        { 
+          path: '/news', 
+          label: 'News & Updates', 
+          description: 'Latest news and announcements',
+          icon: <BookOpen size={14} />
+        }
+      ]
+    },
+    { 
+      path: '/contact', 
+      label: 'Contact',
+      icon: <Phone size={16} />
+    }
+  ];
 
   // Premium animation variants
   const headerVariants = {
@@ -123,6 +234,45 @@ export const Header: React.FC<HeaderProps> = ({ scrolled }) => {
     }
   };
 
+  const dropdownVariants = {
+    hidden: {
+      opacity: 0,
+      y: -10,
+      scale: 0.95
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.2,
+        ease: [0.16, 1, 0.3, 1],
+        staggerChildren: 0.05
+      }
+    },
+    exit: {
+      opacity: 0,
+      y: -10,
+      scale: 0.95,
+      transition: {
+        duration: 0.15,
+        ease: [0.16, 1, 0.3, 1]
+      }
+    }
+  };
+
+  const dropdownItemVariants = {
+    hidden: { opacity: 0, x: -10 },
+    visible: { 
+      opacity: 1, 
+      x: 0,
+      transition: {
+        duration: 0.2,
+        ease: [0.16, 1, 0.3, 1]
+      }
+    }
+  };
+
   const donateButtonVariants = {
     hidden: { 
       scale: 0, 
@@ -149,21 +299,6 @@ export const Header: React.FC<HeaderProps> = ({ scrolled }) => {
     },
     tap: { scale: 0.95 }
   };
-
-  const navigation = [
-    { path: '/', label: 'Home' },
-    { path: '/story', label: 'Story' },
-    { path: '/model', label: 'Model' },
-    { path: '/impact', label: 'Impact' },
-    { path: '/crisis', label: 'Crisis' },
-    { path: '/core-areas', label: 'Core Areas' },
-    { path: '/news', label: 'News' },
-    { path: '/scholarships', label: 'Scholarships' },
-    { path: '/scholars', label: 'Scholars' },
-    { path: '/team', label: 'Team' },
-    { path: '/partners', label: 'Partners' },
-    { path: '/contact', label: 'Contact' }
-  ];
 
   return (
     <motion.header
@@ -259,9 +394,9 @@ export const Header: React.FC<HeaderProps> = ({ scrolled }) => {
             </motion.div>
           </Link>
 
-          {/* Enhanced Desktop Navigation */}
+          {/* Enhanced Desktop Navigation with Dropdowns */}
           <motion.nav 
-            className="hidden lg:flex items-center space-x-8"
+            className="hidden lg:flex items-center space-x-2"
             variants={navVariants}
             style={{ 
               WebkitFontSmoothing: 'antialiased',
@@ -271,52 +406,135 @@ export const Header: React.FC<HeaderProps> = ({ scrolled }) => {
           >
             {navigation.map((item, index) => (
               <motion.div
-                key={item.path}
+                key={item.label}
                 variants={navItemVariants}
-                whileHover="hover"
-                onHoverStart={() => setHoveredNav(item.path)}
-                onHoverEnd={() => setHoveredNav(null)}
+                className="relative"
+                onMouseEnter={() => {
+                  setHoveredNav(item.label);
+                  if (item.subItems) {
+                    setActiveDropdown(item.label);
+                  }
+                }}
+                onMouseLeave={() => {
+                  setHoveredNav(null);
+                  setActiveDropdown(null);
+                }}
               >
-                <Link 
-                  to={item.path} 
-                  className={`relative font-heading font-medium transition-all duration-300 px-3 py-2 rounded-lg ${
-                    isActive(item.path) 
-                      ? 'text-primary bg-primary/10' 
-                      : 'text-white hover:text-primary hover:bg-primary/5'
-                  }`}
-                  style={{ 
-                    WebkitFontSmoothing: 'antialiased',
-                    MozOsxFontSmoothing: 'grayscale',
-                    textRendering: 'optimizeLegibility',
-                    transform: 'translateZ(0)' // Force hardware acceleration without blur
-                  }}
-                >
-                  {item.label}
-                  
-                  {/* Active Indicator */}
-                  {isActive(item.path) && (
-                    <motion.span
-                      layoutId="activeNavIndicator"
-                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                    />
-                  )}
-                  
-                  {/* Hover Effect */}
-                  <AnimatePresence>
-                    {hoveredNav === item.path && !isActive(item.path) && (
-                      <motion.div
-                        className="absolute inset-0 bg-primary/10 rounded-lg"
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.8 }}
-                        transition={{ duration: 0.2 }}
+                {item.path ? (
+                  // Direct link items
+                  <Link 
+                    to={item.path} 
+                    className={`relative font-heading font-medium transition-all duration-300 px-4 py-3 rounded-lg flex items-center space-x-2 ${
+                      isActive(item.path) 
+                        ? 'text-primary bg-primary/10' 
+                        : 'text-white hover:text-primary hover:bg-primary/5'
+                    }`}
+                  >
+                    {item.icon}
+                    <span>{item.label}</span>
+                    
+                    {/* Active Indicator */}
+                    {isActive(item.path) && (
+                      <motion.span
+                        layoutId="activeNavIndicator"
+                        className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full"
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                       />
                     )}
-                  </AnimatePresence>
-                </Link>
+                  </Link>
+                ) : (
+                  // Dropdown items
+                  <div className="relative">
+                    <button 
+                      className={`font-heading font-medium transition-all duration-300 px-4 py-3 rounded-lg flex items-center space-x-2 ${
+                        item.subItems && isActiveGroup(item.subItems)
+                          ? 'text-primary bg-primary/10' 
+                          : 'text-white hover:text-primary hover:bg-primary/5'
+                      }`}
+                    >
+                      {item.icon}
+                      <span>{item.label}</span>
+                      <motion.div
+                        animate={{ rotate: activeDropdown === item.label ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <ChevronDown size={16} />
+                      </motion.div>
+                      
+                      {/* Active Group Indicator */}
+                      {item.subItems && isActiveGroup(item.subItems) && (
+                        <motion.span
+                          layoutId="activeNavIndicator"
+                          className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full"
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                        />
+                      )}
+                    </button>
+
+                    {/* Dropdown Menu */}
+                    <AnimatePresence>
+                      {activeDropdown === item.label && item.subItems && (
+                        <motion.div
+                          variants={dropdownVariants}
+                          initial="hidden"
+                          animate="visible"
+                          exit="exit"
+                          className="absolute top-full mt-2 left-0 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden min-w-[280px] z-50"
+                          style={{ 
+                            backdropFilter: 'blur(20px)',
+                            background: 'rgba(255, 255, 255, 0.98)'
+                          }}
+                        >
+                          <div className="p-2">
+                            {item.subItems.map((subItem) => (
+                              <motion.div
+                                key={subItem.path}
+                                variants={dropdownItemVariants}
+                              >
+                                <Link
+                                  to={subItem.path}
+                                  className={`block px-4 py-3 rounded-lg transition-all duration-200 group ${
+                                    isActive(subItem.path)
+                                      ? 'bg-primary text-secondary shadow-sm'
+                                      : 'text-gray-700 hover:bg-primary/10 hover:text-primary'
+                                  }`}
+                                >
+                                  <div className="flex items-center space-x-3">
+                                    <div className={`p-2 rounded-lg ${
+                                      isActive(subItem.path)
+                                        ? 'bg-secondary/20'
+                                        : 'bg-gray-100 group-hover:bg-primary/20'
+                                    }`}>
+                                      {subItem.icon}
+                                    </div>
+                                    <div className="flex-1">
+                                      <div className="font-heading font-semibold text-sm">
+                                        {subItem.label}
+                                      </div>
+                                      {subItem.description && (
+                                        <div className={`text-xs mt-1 ${
+                                          isActive(subItem.path)
+                                            ? 'text-secondary/80'
+                                            : 'text-gray-500 group-hover:text-primary/80'
+                                        }`}>
+                                          {subItem.description}
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                </Link>
+                              </motion.div>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                )}
               </motion.div>
             ))}
 
@@ -325,6 +543,7 @@ export const Header: React.FC<HeaderProps> = ({ scrolled }) => {
               variants={donateButtonVariants}
               whileHover="hover"
               whileTap="tap"
+              className="ml-4"
             >
               <Link 
                 to="/donate" 
@@ -400,257 +619,120 @@ export const Header: React.FC<HeaderProps> = ({ scrolled }) => {
         </div>
       </div>
 
-      {/* Dark Blue Modal Mobile Dropdown */}
+      {/* Mobile Menu - Enhanced */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <>
             {/* Backdrop Overlay */}
             <motion.div
-             className="lg:hidden fixed inset-0 bg-black/70 z-[9998]"
+              className="lg:hidden fixed inset-0 bg-black/70 z-[9998]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
               onClick={() => setMobileMenuOpen(false)}
-              style={{ top: 0, left: 0, right: 0, bottom: 0, position: 'fixed' }}
             />
             
             {/* Modal Dropdown */}
             <motion.div
               className="lg:hidden fixed top-20 left-4 right-4 shadow-2xl border border-yellow-400/40 rounded-2xl z-[9999] max-h-[80vh] overflow-y-auto backdrop-blur-sm"
               style={{ 
-              position: 'fixed', 
-              zIndex: 9999,
-              background: 'linear-gradient(135deg, #23272e 0%, #FFD700 200%)'
+                background: 'linear-gradient(135deg, #23272e 0%, #FFD700 200%)'
               }}
-              initial={{ 
-              scale: 0.9,
-              opacity: 0,
-              y: -20
-              }}
-              animate={{ 
-              scale: 1,
-              opacity: 1,
-              y: 0
-              }}
-              exit={{ 
-              scale: 0.9,
-              opacity: 0,
-              y: -20
-              }}
-              transition={{ 
-              duration: 0.4,
-              ease: [0.16, 1, 0.3, 1]
-              }}
+              initial={{ scale: 0.9, opacity: 0, y: -20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: -20 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
               {/* Modal Header */}
               <div className="flex items-center justify-between p-6 border-b border-yellow-400/30">
-              <motion.h3 
-                className="text-yellow-300 font-heading font-bold text-xl"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2 }}
-                style={{ 
-                WebkitFontSmoothing: 'antialiased',
-                MozOsxFontSmoothing: 'grayscale',
-                textRendering: 'optimizeLegibility'
-                }}
-              >
-                Navigation
-              </motion.h3>
-              <motion.button
-                className="text-yellow-200 hover:text-yellow-400 transition-colors p-2 rounded-lg hover:bg-yellow-400/10"
-                onClick={() => setMobileMenuOpen(false)}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                initial={{ opacity: 0, rotate: -90 }}
-                animate={{ opacity: 1, rotate: 0 }}
-                transition={{ delay: 0.3 }}
-              >
-                <X size={20} />
-              </motion.button>
+                <motion.h3 
+                  className="text-yellow-300 font-heading font-bold text-xl"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  Navigation
+                </motion.h3>
+                <motion.button
+                  className="text-yellow-200 hover:text-yellow-400 transition-colors p-2 rounded-lg hover:bg-yellow-400/10"
+                  onClick={() => setMobileMenuOpen(false)}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  initial={{ opacity: 0, rotate: -90 }}
+                  animate={{ opacity: 1, rotate: 0 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <X size={20} />
+                </motion.button>
               </div>
 
-              {/* Modal Content */}
-              <div className="p-6">
-              {/* Navigation Grid */}
-              <div 
-                className="grid grid-cols-2 gap-3 mb-6"
-                style={{ 
-                WebkitFontSmoothing: 'antialiased',
-                MozOsxFontSmoothing: 'grayscale',
-                textRendering: 'optimizeLegibility'
-                }}
-              >
+              {/* Mobile Navigation */}
+              <div className="p-6 space-y-4">
                 {navigation.map((item, index) => (
+                  <motion.div
+                    key={item.label}
+                    initial={{ x: -30, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: 0.1 + (index * 0.05), duration: 0.5 }}
+                  >
+                    {item.path ? (
+                      <Link
+                        to={item.path}
+                        className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 ${
+                          isActive(item.path)
+                            ? 'bg-yellow-400 text-gray-900'
+                            : 'bg-yellow-400/10 text-yellow-100 hover:bg-yellow-400/20'
+                        }`}
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {item.icon}
+                        <span className="font-heading font-semibold">{item.label}</span>
+                      </Link>
+                    ) : (
+                      <div className="space-y-2">
+                        <div className="flex items-center space-x-3 px-4 py-3 text-yellow-200 font-heading font-bold text-sm">
+                          {item.icon}
+                          <span>{item.label}</span>
+                        </div>
+                        <div className="ml-6 space-y-1">
+                          {item.subItems?.map((subItem) => (
+                            <Link
+                              key={subItem.path}
+                              to={subItem.path}
+                              className={`flex items-center space-x-3 px-4 py-2 rounded-lg transition-all duration-300 ${
+                                isActive(subItem.path)
+                                  ? 'bg-yellow-400 text-gray-900'
+                                  : 'bg-yellow-400/5 text-yellow-100 hover:bg-yellow-400/15'
+                              }`}
+                              onClick={() => setMobileMenuOpen(false)}
+                            >
+                              {subItem.icon}
+                              <span className="text-sm">{subItem.label}</span>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </motion.div>
+                ))}
+
+                {/* Mobile Donate Button */}
                 <motion.div
-                  key={item.path}
-                  initial={{ 
-                  x: index % 2 === 0 ? -30 : 30, 
-                  opacity: 0,
-                  scale: 0.8
-                  }}
-                  animate={{ 
-                  x: 0, 
-                  opacity: 1,
-                  scale: 1
-                  }}
-                  exit={{ 
-                  x: index % 2 === 0 ? -30 : 30, 
-                  opacity: 0,
-                  scale: 0.8
-                  }}
-                  transition={{ 
-                  duration: 0.5,
-                  delay: 0.1 + (index * 0.05),
-                  ease: [0.16, 1, 0.3, 1]
-                  }}
-                  whileHover={{ 
-                  scale: 1.02
-                  }}
-                  whileTap={{ scale: 0.98 }}
+                  initial={{ y: 30, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.5, duration: 0.5 }}
+                  className="pt-4 border-t border-yellow-400/30"
                 >
                   <Link
-                  to={item.path}
-                  className={`block w-full py-4 px-4 rounded-xl font-heading font-semibold text-center transition-all duration-300 relative overflow-hidden group ${
-                    isActive(item.path)
-                    ? 'bg-yellow-400 text-gray-900 shadow-lg border border-yellow-400'
-                    : 'bg-yellow-400/10 text-yellow-100 hover:bg-yellow-400/20 hover:text-yellow-300 border border-yellow-400/20 hover:border-yellow-400/60'
-                  }`}
-                  onClick={() => setMobileMenuOpen(false)}
-                  style={{ 
-                    WebkitFontSmoothing: 'antialiased',
-                    MozOsxFontSmoothing: 'grayscale',
-                    textRendering: 'optimizeLegibility',
-                    transform: 'translateZ(0)'
-                  }}
+                    to="/donate"
+                    className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 py-4 px-6 rounded-xl font-heading font-bold text-lg flex items-center justify-center shadow-xl"
+                    onClick={() => setMobileMenuOpen(false)}
                   >
-                  {/* Background animation */}
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    initial={false}
-                  />
-                  
-                  <span className="relative z-10">{item.label}</span>
-                  
-                  {/* Active indicator */}
-                  {isActive(item.path) && (
-                    <motion.div
-                    className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-6 h-1 bg-yellow-300 rounded-full"
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{ duration: 0.3, delay: 0.4 }}
-                    />
-                  )}
+                    <Heart size={20} className="mr-3" />
+                    Support Our Mission
                   </Link>
                 </motion.div>
-                ))}
-              </div>
-
-              {/* Donate Button */}
-              <motion.div
-                initial={{ 
-                y: 30, 
-                opacity: 0,
-                scale: 0.9
-                }}
-                animate={{ 
-                y: 0, 
-                opacity: 1,
-                scale: 1
-                }}
-                exit={{ 
-                y: 30, 
-                opacity: 0,
-                scale: 0.9
-                }}
-                transition={{ 
-                duration: 0.5,
-                delay: 0.5,
-                ease: [0.16, 1, 0.3, 1]
-                }}
-                whileHover={{ scale: 1.02, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Link
-                to="/donate"
-                className="w-full bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-size-200 hover:bg-pos-100 text-gray-900 py-5 px-6 rounded-xl font-heading font-bold text-lg flex items-center justify-center shadow-xl transition-all duration-500 relative overflow-hidden group"
-                onClick={() => setMobileMenuOpen(false)}
-                >
-                {/* Animated background */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-yellow-300 to-yellow-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                />
-                
-                {/* Shimmer effect */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12"
-                  initial={{ x: '-100%' }}
-                  animate={{ x: '200%' }}
-                  transition={{ 
-                  duration: 2.5, 
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  repeatDelay: 3
-                  }}
-                />
-                
-                <motion.div
-                  className="relative z-10 flex items-center"
-                  animate={{ 
-                  scale: [1, 1.05, 1]
-                  }}
-                  transition={{ 
-                  duration: 2, 
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                  }}
-                >
-                  <Heart size={22} className="mr-3 text-yellow-700" />
-                  <span>Support Our Mission</span>
-                </motion.div>
-                </Link>
-              </motion.div>
-
-              {/* Decorative Footer */}
-              <motion.div 
-                className="flex justify-center items-center mt-6 pt-4 border-t border-yellow-400/20"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.7 }}
-              >
-                <div className="flex space-x-2">
-                {[0, 1, 2].map((index) => (
-                  <motion.div
-                  key={index}
-                  className="w-2 h-2 bg-yellow-400 rounded-full"
-                  animate={{ 
-                    scale: [1, 1.3, 1],
-                    opacity: [0.4, 1, 0.4]
-                  }}
-                  transition={{ 
-                    duration: 2, 
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: index * 0.2
-                  }}
-                  />
-                ))}
-                </div>
-                <motion.div
-                className="ml-4 text-yellow-300/80"
-                animate={{ 
-                  rotate: [0, 360]
-                }}
-                transition={{ 
-                  duration: 8, 
-                  repeat: Infinity,
-                  ease: "linear"
-                }}
-                >
-                <Sparkles size={16} />
-                </motion.div>
-              </motion.div>
               </div>
             </motion.div>
           </>
