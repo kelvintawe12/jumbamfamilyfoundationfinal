@@ -16,79 +16,31 @@ const Contact = lazy(() => import('./pages/Contact').then(module => ({ default: 
 const Donate = lazy(() => import('./pages/Donate').then(module => ({ default: module.Donate })));
 const NotFound = lazy(() => import('./pages/NotFound').then(module => ({ default: module.NotFound })));
 
-// Enhanced loading component with hope theme - inspired by CheckMe's caring design
+// Minimal loading component for fast navigation
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-green-50">
-    <div className="flex flex-col items-center space-y-6">
-      {/* Main spinner */}
+    <div className="flex flex-col items-center space-y-4">
+      {/* Simplified spinner */}
       <motion.div
-        className="relative"
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <motion.div
-          className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-        />
-        <motion.div
-          className="absolute inset-0 w-16 h-16 border-4 border-secondary border-b-transparent rounded-full"
-          animate={{ rotate: -360 }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-        />
-      </motion.div>
-
-      {/* Loading text with typewriter effect */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.5 }}
-        className="text-center"
-      >
-        <motion.p
-          className="text-gray-600 font-medium text-lg"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5, duration: 0.5 }}
-        >
-          Restoring Hope...
-        </motion.p>
-        <motion.p
-          className="text-gray-400 text-sm mt-2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8, duration: 0.5 }}
-        >
-          Building bridges of compassion in Cameroon
-        </motion.p>
-      </motion.div>
-
-      {/* Pulse animation for additional visual appeal */}
-      <motion.div
-        className="flex space-x-2"
+        className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+      />
+      
+      {/* Simple loading text */}
+      <motion.p
+        className="text-gray-600 font-medium"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 0.5 }}
+        transition={{ duration: 0.2 }}
       >
-        {[0, 1, 2].map((i) => (
-          <motion.div
-            key={i}
-            className="w-2 h-2 bg-primary rounded-full"
-            animate={{ scale: [1, 1.2, 1] }}
-            transition={{
-              duration: 0.6,
-              repeat: Infinity,
-              delay: i * 0.2,
-            }}
-          />
-        ))}
-      </motion.div>
+        Loading...
+      </motion.p>
     </div>
   </div>
 );
 
-// Page transition wrapper with enhanced animations
+// Page transition wrapper with fast animations
 const PageTransition = ({ 
   children, 
   pageKey 
@@ -98,13 +50,12 @@ const PageTransition = ({
 }) => (
   <motion.div
     key={pageKey}
-    initial={{ opacity: 0, y: 20, scale: 0.98 }}
-    animate={{ opacity: 1, y: 0, scale: 1 }}
-    exit={{ opacity: 0, y: -20, scale: 0.98 }}
+    initial={{ opacity: 0, y: 10 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -10 }}
     transition={{ 
-      duration: 0.6,
-      ease: [0.25, 0.1, 0.25, 1],
-      layout: { duration: 0.4 }
+      duration: 0.2,
+      ease: "easeOut"
     }}
     className="w-full"
   >
