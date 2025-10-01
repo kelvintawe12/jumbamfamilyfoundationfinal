@@ -43,7 +43,11 @@ export const HopeMeter: React.FC = () => {
     const currentIndex = routes.findIndex(route => route.path === location.pathname);
     if (currentIndex >= 0) {
       setCurrentRouteIndex(currentIndex);
-      setProgress(((currentIndex + 1) / routes.length) * 100);
+      setProgress(Math.min(100, Math.max(0, ((currentIndex + 1) / routes.length) * 100)));
+    } else {
+      // Default to home if route not found
+      setCurrentRouteIndex(0);
+      setProgress(Math.min(100, Math.max(0, (1 / routes.length) * 100)));
     }
   }, [location]);
 
@@ -64,46 +68,46 @@ export const HopeMeter: React.FC = () => {
     };
   }, []);
 
-  const currentRoute = routes[currentRouteIndex];
+  const currentRoute = routes[currentRouteIndex] || routes[0];
 
   return (
     <AnimatePresence>
       {isVisible && (
-        <motion.div 
-          className="fixed right-6 top-1/2 transform -translate-y-1/2 z-40 hidden lg:block"
+        <motion.div
+          className="fixed z-40 bottom-4 right-2 md:right-6 md:bottom-auto md:top-1/2 md:-translate-y-1/2 max-w-xs md:max-w-sm"
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 50 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          {/* Current Page Indicator */}
-          <motion.div 
-            className="bg-white/95 backdrop-blur-md shadow-2xl rounded-2xl p-4 mb-4 border border-gray-100"
+          {/* Current Page Indicator - Hidden on small screens */}
+          <motion.div
+            className="bg-white/95 backdrop-blur-md shadow-2xl rounded-2xl p-3 md:p-4 mb-3 md:mb-4 border border-gray-100 hidden md:block"
             whileHover={{ scale: 1.05, x: -5 }}
             whileTap={{ scale: 0.95 }}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}
           >
-            <div className="flex items-center space-x-3 mb-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-yellow-500 to-yellow-600 flex items-center justify-center">
-                <currentRoute.icon className="w-4 h-4 text-white" />
+            <div className="flex items-center space-x-2 md:space-x-3 mb-2">
+              <div className="w-6 md:w-8 h-6 md:h-8 rounded-lg bg-gradient-to-br from-yellow-500 to-yellow-600 flex items-center justify-center">
+                <currentRoute.icon className="w-3 md:w-4 h-3 md:h-4 text-white" />
               </div>
-              <div className="text-slate-800 font-semibold text-sm">
+              <div className="text-slate-800 font-semibold text-xs md:text-sm">
                 {currentRoute.label}
               </div>
             </div>
-            <div className="text-xs text-gray-600 pl-11 max-w-32">
+            <div className="text-xs text-gray-600 pl-8 md:pl-11 max-w-28 md:max-w-32">
               {currentRoute.description}
             </div>
-            
+
             {/* Progress indicator */}
-            <div className="flex items-center space-x-2 mt-3 pl-11">
+            <div className="flex items-center space-x-2 mt-3 pl-8 md:pl-11">
               <div className="text-xs text-gray-500">
                 {currentRouteIndex + 1}/{routes.length}
               </div>
               <div className="flex-1 h-1 bg-gray-200 rounded-full overflow-hidden">
-                <motion.div 
+                <motion.div
                   className="h-full bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-full"
                   initial={{ width: 0 }}
                   animate={{ width: `${((currentRouteIndex + 1) / routes.length) * 100}%` }}
@@ -114,26 +118,26 @@ export const HopeMeter: React.FC = () => {
           </motion.div>
 
           {/* Main Progress Bar */}
-          <motion.div 
+          <motion.div
             className="relative"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.5 }}
           >
             {/* Background bar */}
-            <div className="h-64 w-3 bg-white/30 backdrop-blur-sm rounded-full relative overflow-hidden shadow-lg border border-white/20">
+            <div className="h-32 md:h-64 w-2 md:w-3 bg-white/30 backdrop-blur-sm rounded-full relative overflow-hidden shadow-lg border border-white/20">
               {/* Animated progress fill */}
               <AnimatePresence>
                 <motion.div
                   key={progress}
                   className="absolute bottom-0 w-full bg-gradient-to-t from-yellow-500 via-yellow-500 to-yellow-400 rounded-full relative overflow-hidden"
                   initial={{ height: 0, opacity: 0 }}
-                  animate={{ 
-                    height: `${progress}%`, 
-                    opacity: 1 
+                  animate={{
+                    height: `${progress}%`,
+                    opacity: 1
                   }}
-                  transition={{ 
-                    duration: 0.8, 
+                  transition={{
+                    duration: 0.8,
                     ease: [0.22, 1, 0.36, 1],
                     opacity: { duration: 0.3 }
                   }}
@@ -142,28 +146,28 @@ export const HopeMeter: React.FC = () => {
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-t from-transparent via-white/20 to-transparent"
                     animate={{ y: ['-100%', '100%'] }}
-                    transition={{ 
-                      duration: 2, 
-                      repeat: Infinity, 
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
                       ease: "easeInOut",
                       repeatDelay: 1
                     }}
                   />
-                  
+
                   {/* Sparkle effect at the top */}
                   <motion.div
                     className="absolute -top-1 left-1/2 transform -translate-x-1/2"
-                    animate={{ 
+                    animate={{
                       scale: [1, 1.2, 1],
                       rotate: [0, 180, 360]
                     }}
-                    transition={{ 
-                      duration: 2, 
+                    transition={{
+                      duration: 2,
                       repeat: Infinity,
                       ease: "easeInOut"
                     }}
                   >
-                    <Sparkles className="w-3 h-3 text-yellow-300" />
+                    <Sparkles className="w-2 md:w-3 h-2 md:h-3 text-yellow-300" />
                   </motion.div>
                 </motion.div>
               </AnimatePresence>
@@ -173,26 +177,25 @@ export const HopeMeter: React.FC = () => {
                 const position = ((index + 1) / routes.length) * 100;
                 const isActive = index <= currentRouteIndex;
                 const isCurrent = index === currentRouteIndex;
-                
+
                 return (
                   <motion.div
                     key={route.path}
-                    className={`absolute w-6 h-6 transform -translate-x-1/2 rounded-full border-2 transition-all duration-300 ${
-                      isActive 
-                        ? 'bg-white border-yellow-500 shadow-lg' 
+                    className={`absolute w-4 md:w-6 h-4 md:h-6 transform -translate-x-1/2 -translate-y-2 md:-translate-y-3 rounded-full border-2 transition-all duration-300 ${
+                      isActive
+                        ? 'bg-white border-yellow-500 shadow-lg'
                         : 'bg-white/50 border-gray-300'
                     }`}
-                    style={{ 
+                    style={{
                       bottom: `${position}%`,
-                      left: '50%',
-                      marginBottom: '-12px'
+                      left: '50%'
                     }}
                     initial={{ scale: 0, opacity: 0 }}
-                    animate={{ 
-                      scale: isCurrent ? 1.3 : 1, 
-                      opacity: 1 
+                    animate={{
+                      scale: isCurrent ? 1.3 : 1,
+                      opacity: 1
                     }}
-                    transition={{ 
+                    transition={{
                       delay: index * 0.1 + 0.7,
                       duration: 0.4,
                       type: "spring",
@@ -203,19 +206,19 @@ export const HopeMeter: React.FC = () => {
                     <div className={`w-full h-full rounded-full flex items-center justify-center ${
                       isActive ? 'text-yellow-600' : 'text-gray-400'
                     }`}>
-                      <route.icon className="w-3 h-3" />
+                      <route.icon className="w-2 md:w-3 h-2 md:h-3" />
                     </div>
-                    
+
                     {/* Pulse effect for current route */}
                     {isCurrent && (
                       <motion.div
                         className="absolute inset-0 rounded-full border border-yellow-500"
-                        animate={{ 
+                        animate={{
                           scale: [1, 1.5, 1],
                           opacity: [1, 0, 1]
                         }}
-                        transition={{ 
-                          duration: 2, 
+                        transition={{
+                          duration: 2,
                           repeat: Infinity,
                           ease: "easeInOut"
                         }}
@@ -233,8 +236,8 @@ export const HopeMeter: React.FC = () => {
                   key={i}
                   className="absolute w-1 h-1 bg-yellow-400 rounded-full opacity-60"
                   animate={{
-                    y: [-20, -80],
-                    x: [Math.random() * 20 - 10, Math.random() * 20 - 10],
+                    y: [-10, -40],
+                    x: [Math.random() * 10 - 5, Math.random() * 10 - 5],
                     opacity: [0, 1, 0]
                   }}
                   transition={{
@@ -252,9 +255,9 @@ export const HopeMeter: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* Hope Quote */}
-          <motion.div 
-            className="bg-gradient-to-r from-slate-800 to-slate-700 text-white p-3 rounded-xl mt-4 shadow-lg max-w-40"
+          {/* Hope Quote - Hidden on small screens */}
+          <motion.div
+            className="bg-gradient-to-r from-slate-800 to-slate-700 text-white p-2 md:p-3 rounded-xl mt-3 md:mt-4 shadow-lg max-w-32 md:max-w-40 hidden md:block"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2, duration: 0.5 }}
