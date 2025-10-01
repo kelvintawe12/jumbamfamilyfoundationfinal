@@ -396,7 +396,7 @@ export const Header: React.FC<HeaderProps> = ({ scrolled }) => {
 
           {/* Enhanced Desktop Navigation with Dropdowns */}
           <motion.nav 
-            className="hidden lg:flex items-center space-x-2"
+            className="hidden lg:flex items-center space-x-1"
             variants={navVariants}
             style={{ 
               WebkitFontSmoothing: 'antialiased',
@@ -424,7 +424,7 @@ export const Header: React.FC<HeaderProps> = ({ scrolled }) => {
                   // Direct link items
                   <Link 
                     to={item.path} 
-                    className={`relative font-heading font-medium transition-all duration-300 px-4 py-3 rounded-lg flex items-center space-x-2 ${
+                    className={`relative font-heading font-medium transition-all duration-300 px-6 py-3 rounded-lg flex items-center justify-center space-x-2 min-w-[120px] ${
                       isActive(item.path) 
                         ? 'text-primary bg-primary/10' 
                         : 'text-white hover:text-primary hover:bg-primary/5'
@@ -448,7 +448,7 @@ export const Header: React.FC<HeaderProps> = ({ scrolled }) => {
                   // Dropdown items
                   <div className="relative">
                     <button 
-                      className={`font-heading font-medium transition-all duration-300 px-4 py-3 rounded-lg flex items-center space-x-2 ${
+                      className={`font-heading font-medium transition-all duration-300 px-6 py-3 rounded-lg flex items-center justify-center space-x-2 min-w-[120px] ${
                         item.subItems && isActiveGroup(item.subItems)
                           ? 'text-primary bg-primary/10' 
                           : 'text-white hover:text-primary hover:bg-primary/5'
