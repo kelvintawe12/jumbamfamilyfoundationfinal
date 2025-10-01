@@ -367,7 +367,7 @@ export const Crisis: React.FC = () => {
         </motion.section>
 
         {/* Crisis Overview Section */}
-        <section className="py-24 bg-white">
+        <section className="py-20 bg-white">
           <div className="container mx-auto px-6">
             <motion.div
               className="max-w-4xl mx-auto"
@@ -377,7 +377,7 @@ export const Crisis: React.FC = () => {
               viewport={{ once: true }}
             >
               <motion.div
-                className="text-center mb-16"
+                className="text-center mb-12"
                 variants={premiumVariants.staggerContainer}
               >
                 <motion.div
@@ -397,7 +397,7 @@ export const Crisis: React.FC = () => {
               </motion.div>
 
               <motion.div
-                className="bg-gradient-to-br from-gray-50 to-white p-8 md:p-12 rounded-2xl shadow-lg border border-gray-200/50 mb-16"
+                className="bg-gradient-to-br from-gray-50 to-white p-8 md:p-12 rounded-2xl shadow-lg border border-gray-200/50 mb-12"
                 variants={premiumVariants.fadeInUp}
                 whileHover={{ scale: 1.02, y: -5 }}
                 transition={{ duration: 0.3 }}
@@ -419,7 +419,7 @@ export const Crisis: React.FC = () => {
 
               {/* Regional Impact */}
               <motion.div 
-                className="grid grid-cols-1 md:grid-cols-2 gap-8"
+                className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8"
                 variants={premiumVariants.staggerContainer}
               >
                 <motion.div
