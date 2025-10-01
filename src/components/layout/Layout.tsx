@@ -22,7 +22,12 @@ export const Layout: React.FC<{
   }, []);
 
   return (
-        <div className="flex flex-col min-h-screen bg-white">     <Header scrolled={scrolled} />   <main className="flex-grow pt-24 relative z-10">\n        {/* Use Outlet for nested routing or children for direct component passing */}\n        {children || <Outlet />}\n      </main>
+    <div className="flex flex-col min-h-screen bg-white">
+      <Header scrolled={scrolled} />
+      <main className="flex-grow pt-24 relative z-10">
+        {/* Use Outlet for nested routing or children for direct component passing */}
+        {children || <Outlet />}
+      </main>
       <HopeMeter />
       <HopeGuide />
       <Footer />
