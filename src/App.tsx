@@ -1,6 +1,7 @@
 import { useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import { HelmetProvider } from 'react-helmet-async';
 import { Layout } from './components/layout/Layout';
 
 // Lazy load pages for better performance - inspired by CheckMe's modular approach
@@ -282,8 +283,10 @@ export function App() {
   }, []);
 
   return (
-    <Router>
-      <AppRouter />
-    </Router>
+    <HelmetProvider>
+      <Router>
+        <AppRouter />
+      </Router>
+    </HelmetProvider>
   );
 }
