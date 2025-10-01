@@ -42,7 +42,12 @@ import {
   InstagramIcon,
   YoutubeIcon,
   LinkedinIcon,
-  AlertCircleIcon
+  AlertCircleIcon,
+  Stethoscope,
+  BookOpen,
+  Briefcase,
+  BarChart3,
+  Newspaper
 } from 'lucide-react';
 
 interface Comment {
@@ -90,6 +95,7 @@ interface Post {
     link: string;
     icon: React.ElementType;
   };
+  contentIcon?: React.ElementType;
 }
 
 const reactionIcons = {
@@ -134,6 +140,33 @@ const socialIcons = {
   instagram: InstagramIcon,
   youtube: YoutubeIcon,
   linkedin: LinkedinIcon
+};
+
+// Helper function to render content with icon
+const renderContentWithIcon = (content: string, icon?: React.ElementType) => {
+  const ContentIcon = icon;
+  
+  // Clean emoji patterns from content
+  const cleanContent = content
+    .replace(/🏥|📚|👩‍💼|📊|📰/g, '') // Remove leading emojis
+    .replace(/🎓|💡|🤝|🏆|🍞|💰|🏪|👥|📈|🌟|💪|🙏❤️|📈/g, '') // Remove inline emojis
+    .trim();
+  
+  const lines = cleanContent.split('\\n');
+  const firstLine = lines[0];
+  const restContent = lines.slice(1).join('\\n');
+  
+  return (
+    <div className="space-y-2">
+      <div className="flex items-start space-x-2">
+        {ContentIcon && <ContentIcon className="w-5 h-5 text-current mt-1 flex-shrink-0" />}
+        <div className="font-semibold">{firstLine}</div>
+      </div>
+      {restContent && (
+        <div className="whitespace-pre-line">{restContent}</div>
+      )}
+    </div>
+  );
 };
 
 export const Feed: React.FC = () => {
@@ -189,7 +222,8 @@ export const Feed: React.FC = () => {
         label: 'Support Our Health Initiatives',
         link: '/donate/health',
         icon: HeartHandshakeIcon
-      }
+      },
+      contentIcon: Stethoscope
     },
     {
       id: '2',
@@ -240,7 +274,8 @@ export const Feed: React.FC = () => {
         label: 'Support Our Scholarship Program',
         link: '/donate/scholarships',
         icon: GraduationCapIcon
-      }
+      },
+      contentIcon: BookOpen
     },
     {
       id: '3',
@@ -282,7 +317,8 @@ export const Feed: React.FC = () => {
         label: 'Support Women Empowerment',
         link: '/donate/empowerment',
         icon: HandHelpingIcon
-      }
+      },
+      contentIcon: Briefcase
     },
     {
       id: '4',
@@ -324,7 +360,8 @@ export const Feed: React.FC = () => {
         label: 'View Full Report',
         link: '/assets/reports/q3-2025-impact.pdf',
         icon: FileTextIcon
-      }
+      },
+      contentIcon: BarChart3
     },
     {
       id: '5',
@@ -366,7 +403,8 @@ export const Feed: React.FC = () => {
         label: 'Donate Now',
         link: '/donate/emergency-fund',
         icon: HeartIcon
-      }
+      },
+      contentIcon: AlertCircleIcon
     },
     {
       id: '6',
@@ -408,7 +446,8 @@ export const Feed: React.FC = () => {
         label: 'Read Full Story',
         link: 'https://www.bbc.com/news/world-africa-54523895',
         icon: ExternalLinkIcon
-      }
+      },
+      contentIcon: Newspaper
     }
   ]);
 
@@ -783,9 +822,9 @@ export const Feed: React.FC = () => {
                     {/* Post Content */}
                     <div className="p-6">
                       <div className="prose max-w-none">
-                        <p className="text-gray-700 leading-relaxed whitespace-pre-line text-lg">
-                          {post.content}
-                        </p>
+                        <div className="text-gray-700 leading-relaxed text-lg">
+                          {renderContentWithIcon(post.content, post.contentIcon)}
+                        </div>
                       </div>
                       
                       {/* Tags */}

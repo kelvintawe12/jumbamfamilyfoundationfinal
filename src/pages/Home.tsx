@@ -1290,6 +1290,185 @@ export const Home: React.FC = () => {
           </div>
         </section>
 
+        {/* Community Feed & Blog Section */}
+        <section className="py-20 bg-gradient-to-br from-blue-50 via-white to-cyan-50">
+          <div className="container mx-auto px-6">
+            <SectionTitle
+              title="Community Feed & Blog"
+              subtitle="Stories, updates, and insights from our community"
+              centered
+            />
+
+            <motion.div
+              className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16"
+              initial="hidden"
+              whileInView="visible"
+              variants={premiumVariants.cardContainer}
+              viewport={{ once: true }}
+            >
+              {/* Community Feed Preview */}
+              <motion.div
+                className="bg-white rounded-2xl p-8 shadow-lg"
+                variants={premiumVariants.premiumCard}
+                whileHover="hover"
+              >
+                <div className="flex items-center mb-6">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center mr-4">
+                    <UsersIcon className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-800">Community Feed</h3>
+                    <p className="text-gray-600">Real-time updates from our work</p>
+                  </div>
+                </div>
+
+                <div className="space-y-4 mb-6">
+                  {[
+                    {
+                      type: "Impact",
+                      content: "Successfully distributed school supplies to 200 children in Santa...",
+                      time: "2 hours ago",
+                      icon: HeartIcon,
+                      color: "text-red-500"
+                    },
+                    {
+                      type: "Event",
+                      content: "Women's empowerment workshop completed with 45 participants...",
+                      time: "1 day ago",
+                      icon: UsersIcon,
+                      color: "text-blue-500"
+                    },
+                    {
+                      type: "Update",
+                      content: "New partnership announced with local health clinic...",
+                      time: "3 days ago",
+                      icon: BuildingIcon,
+                      color: "text-green-500"
+                    }
+                  ].map((feed, index) => (
+                    <motion.div
+                      key={index}
+                      className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1, duration: 0.6 }}
+                      viewport={{ once: true }}
+                    >
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${feed.color.replace('text-', 'bg-').replace('-500', '-100')}`}>
+                        <feed.icon className={`w-4 h-4 ${feed.color}`} />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm text-gray-700">{feed.content}</p>
+                        <span className="text-xs text-gray-500 mt-1 block">{feed.time}</span>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+
+                <Link
+                  to="/feed"
+                  className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-700 transition-colors group"
+                >
+                  View Full Feed
+                  <ArrowRightIcon className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </motion.div>
+
+              {/* Blog Preview */}
+              <motion.div
+                className="bg-white rounded-2xl p-8 shadow-lg"
+                variants={premiumVariants.premiumCard}
+                whileHover="hover"
+              >
+                <div className="flex items-center mb-6">
+                  <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-full flex items-center justify-center mr-4">
+                    <BookIcon className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-800">Latest Blog Posts</h3>
+                    <p className="text-gray-600">Insights and stories from our team</p>
+                  </div>
+                </div>
+
+                <div className="space-y-4 mb-6">
+                  {[
+                    {
+                      title: "The Power of Education in Crisis Zones",
+                      excerpt: "How our scholarship program is changing lives one student at a time...",
+                      author: "Desmond Jumbam",
+                      date: "March 10, 2024",
+                      readTime: "5 min read"
+                    },
+                    {
+                      title: "Empowering Women: Beyond Financial Support",
+                      excerpt: "The holistic approach we're taking to women's empowerment in Cameroon...",
+                      author: "Seh Rebecca",
+                      date: "March 5, 2024",
+                      readTime: "7 min read"
+                    }
+                  ].map((post, index) => (
+                    <motion.div
+                      key={index}
+                      className="p-4 border border-gray-100 rounded-lg hover:border-blue-200 transition-colors group cursor-pointer"
+                      initial={{ opacity: 0, x: 20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1, duration: 0.6 }}
+                      viewport={{ once: true }}
+                    >
+                      <h4 className="font-semibold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">
+                        {post.title}
+                      </h4>
+                      <p className="text-sm text-gray-600 mb-3">{post.excerpt}</p>
+                      <div className="flex items-center justify-between text-xs text-gray-500">
+                        <span>By {post.author}</span>
+                        <div className="flex items-center space-x-2">
+                          <span>{post.date}</span>
+                          <span>•</span>
+                          <span>{post.readTime}</span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+
+                <Link
+                  to="/blog"
+                  className="inline-flex items-center text-cyan-600 font-semibold hover:text-cyan-700 transition-colors group"
+                >
+                  Read All Posts
+                  <ArrowRightIcon className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </motion.div>
+            </motion.div>
+
+            {/* Call to Action */}
+            <motion.div
+              className="text-center"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <div className="inline-flex items-center space-x-4">
+                <Link
+                  to="/feed"
+                  className="inline-flex items-center bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-cyan-700 transition-all duration-300"
+                >
+                  <UsersIcon className="mr-2 w-5 h-5" />
+                  Join the Conversation
+                </Link>
+                <Link
+                  to="/blog"
+                  className="inline-flex items-center border-2 border-cyan-600 text-cyan-600 px-6 py-3 rounded-lg font-semibold hover:bg-cyan-600 hover:text-white transition-colors"
+                >
+                  <BookIcon className="mr-2 w-5 h-5" />
+                  Explore Our Blog
+                </Link>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
         {/* Donation Section */}
         <section className="py-20 bg-white">
           <div className="container mx-auto px-6">
