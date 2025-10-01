@@ -463,7 +463,7 @@ export const Home: React.FC = () => {
                   className="mb-4"
                   variants={premiumVariants.textReveal}
                 >
-                  <span className="inline-flex items-center px-4 py-2 bg-primary/20 backdrop-blur-sm rounded-full text-primary font-semibold text-sm border border-primary/30">
+                  <span className="inline-flex items-center px-4 py-2 bg-primary/20 backdrop-blur-sm rounded-full text-primary font-heading font-semibold text-sm border border-primary/30">
                     <Star className="w-4 h-4 mr-2" />
                     Restoring Hope Since 2020
                   </span>
@@ -489,7 +489,7 @@ export const Home: React.FC = () => {
                 </motion.h1>
 
                 <motion.p 
-                  className="font-body text-xl md:text-2xl mb-8 text-white/90"
+                  className="font-heading text-xl md:text-2xl mb-8 text-white/90"
                   variants={premiumVariants.textReveal}
                 >
                   Contributing to a prosperous Cameroon and Africa through
@@ -568,7 +568,7 @@ export const Home: React.FC = () => {
                         <stat.icon className="w-6 h-6 text-primary" />
                       </motion.div>
                       <div className="text-2xl font-bold text-white">{stat.label}</div>
-                      <div className="text-sm text-white/70">{stat.sublabel}</div>
+                      <div className="font-heading text-sm text-white/70">{stat.sublabel}</div>
                     </motion.div>
                   ))}
                 </motion.div>
@@ -602,7 +602,7 @@ export const Home: React.FC = () => {
                   >
                     <div className="flex items-center space-x-2">
                       <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                      <span className="text-sm font-semibold text-gray-700">Active Impact</span>
+                      <span className="font-heading text-sm font-semibold text-gray-700">Active Impact</span>
                     </div>
                   </motion.div>
 
@@ -613,7 +613,7 @@ export const Home: React.FC = () => {
                   >
                     <div className="flex items-center space-x-2">
                       <HeartIcon className="w-5 h-5" />
-                      <span className="text-sm font-semibold">Hope Restored</span>
+                      <span className="font-heading text-sm font-semibold">Hope Restored</span>
                     </div>
                   </motion.div>
                 </motion.div>
@@ -660,7 +660,7 @@ export const Home: React.FC = () => {
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto text-center">
             <SectionTitle title="Our Mission" subtitle="Transforming tragedy into hope and creating lasting positive change" centered />
-            <motion.p className="text-xl mb-10 text-gray-700" initial={{
+            <motion.p className="font-heading text-xl mb-10 text-gray-700" initial={{
             opacity: 0
           }} whileInView={{
             opacity: 1
@@ -734,7 +734,7 @@ export const Home: React.FC = () => {
               variants={premiumVariants.heroContent}
             >
               <motion.div
-                className="inline-flex items-center px-4 py-2 bg-primary/10 backdrop-blur-sm rounded-full text-primary font-semibold text-sm border border-primary/20 mb-6"
+                className="inline-flex items-center px-4 py-2 bg-primary/10 backdrop-blur-sm rounded-full text-primary font-heading font-semibold text-sm border border-primary/20 mb-6"
                 variants={premiumVariants.textReveal}
               >
                 <BarChart3Icon className="w-4 h-4 mr-2" />
@@ -916,7 +916,7 @@ export const Home: React.FC = () => {
               variants={premiumVariants.heroContent}
             >
               <motion.div
-                className="inline-flex items-center px-4 py-2 bg-primary/10 backdrop-blur-sm rounded-full text-primary font-semibold text-sm border border-primary/20 mb-6"
+                className="inline-flex items-center px-4 py-2 bg-primary/10 backdrop-blur-sm rounded-full text-primary font-heading font-semibold text-sm border border-primary/20 mb-6"
                 variants={premiumVariants.textReveal}
               >
                 <HandIcon className="w-4 h-4 mr-2" />
@@ -968,13 +968,13 @@ export const Home: React.FC = () => {
               <h3 className="font-heading text-2xl font-bold mb-4">
                 A Humanitarian Challenge
               </h3>
-              <p className="text-white/80 mb-6">
+              <p className="font-heading text-white/80 mb-6">
                 The Anglophone Crisis in Cameroon is an ongoing conflict in the
                 Northwest and Southwest regions, where the country's Anglophone
                 minority has been fighting for greater autonomy or independence
                 from the majority Francophone government.
               </p>
-              <p className="text-white/80 mb-8">
+              <p className="font-heading text-white/80 mb-8">
                 This crisis has had devastating effects with thousands killed,
                 hundreds of thousands displaced, and significant disruptions to
                 education, healthcare, and economic activities.
@@ -984,19 +984,19 @@ export const Home: React.FC = () => {
                   <div className="text-primary font-heading text-3xl font-bold">
                     4,000+
                   </div>
-                  <div className="text-sm">Lives Lost</div>
+                  <div className="font-heading text-sm">Lives Lost</div>
                 </div>
                 <div className="bg-white/10 p-4 rounded-lg text-center">
                   <div className="text-primary font-heading text-3xl font-bold">
                     700K+
                   </div>
-                  <div className="text-sm">Displaced</div>
+                  <div className="font-heading text-sm">Displaced</div>
                 </div>
                 <div className="bg-white/10 p-4 rounded-lg text-center">
                   <div className="text-primary font-heading text-3xl font-bold">
                     80%
                   </div>
-                  <div className="text-sm">Schools Closed</div>
+                  <div className="font-heading text-sm">Schools Closed</div>
                 </div>
               </div>
               <Link to="/crisis" className="inline-flex items-center bg-primary hover:bg-primary/90 text-secondary py-3 px-6 rounded-md transition-all hover:scale-105 font-bold">
@@ -1087,7 +1087,7 @@ export const Home: React.FC = () => {
           }}>
               Join Us in Restoring Hope
             </motion.h2>
-            <motion.p className="text-xl mb-10 text-secondary/80" initial={{
+            <motion.p className="font-heading text-xl mb-10 text-secondary/80" initial={{
             opacity: 0,
             y: 20
           }} whileInView={{
@@ -1216,7 +1216,7 @@ const StatCard: React.FC<StatCardProps> = ({
       <div className="font-heading text-xl font-bold text-secondary mb-2">
         {label}
       </div>
-      <div className="font-body text-secondary/70">{description}</div>
+      <div className="font-heading text-secondary/70">{description}</div>
     </motion.div>;
 };
 // Enhanced Core Area Card with features list
@@ -1263,11 +1263,11 @@ const EnhancedCoreAreaCard: React.FC<EnhancedCoreAreaCardProps> = ({
       </div>
       <div className="p-6">
         <h3 className="font-heading text-xl font-bold mb-3">{title}</h3>
-        <p className="font-body text-secondary/80 mb-4">{description}</p>
+        <p className="font-heading text-secondary/80 mb-4">{description}</p>
         <div className="mb-4">
           {features.map((feature, index) => <div key={index} className="flex items-center mb-2">
               <CheckIcon className="h-4 w-4 text-primary mr-2" />
-              <span className="text-sm">{feature}</span>
+              <span className="font-heading text-sm">{feature}</span>
             </div>)}
         </div>
         <Link to={link} className="text-primary font-medium hover:underline inline-flex items-center group">
@@ -1311,7 +1311,7 @@ const NewsCard: React.FC<NewsCardProps> = ({
       }} />
       </div>
       <div className="p-6">
-        <div className="flex items-center text-sm text-dark/60 mb-2">
+        <div className="flex items-center font-heading text-sm text-dark/60 mb-2">
           <CalendarIcon className="h-4 w-4 mr-1" />
           <span>{date}</span>
           <span className="mx-2">•</span>
