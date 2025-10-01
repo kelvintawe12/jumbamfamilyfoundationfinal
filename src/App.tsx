@@ -14,6 +14,10 @@ const CoreAreas = lazy(() => import('./pages/CoreAreas').then(module => ({ defau
 const News = lazy(() => import('./pages/News').then(module => ({ default: module.News })));
 const Contact = lazy(() => import('./pages/Contact').then(module => ({ default: module.Contact })));
 const Donate = lazy(() => import('./pages/Donate').then(module => ({ default: module.Donate })));
+const Scholarships = lazy(() => import('./pages/Scholarships').then(module => ({ default: module.Scholarships })));
+const Scholars = lazy(() => import('./pages/Scholars').then(module => ({ default: module.Scholars })));
+const Team = lazy(() => import('./pages/Team').then(module => ({ default: module.Team })));
+const Partners = lazy(() => import('./components/Partners').then(module => ({ default: module.Partners })));
 const NotFound = lazy(() => import('./pages/NotFound').then(module => ({ default: module.NotFound })));
 
 // Minimal loading component for fast navigation
@@ -182,6 +186,54 @@ const AppRouter = () => {
               <Suspense fallback={<LoadingSpinner />}>
                 <PageTransition pageKey="donate">
                   <Donate />
+                </PageTransition>
+              </Suspense>
+            } 
+          />
+          
+          {/* Partners Route */}
+          <Route 
+            path="/partners" 
+            element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <PageTransition pageKey="partners">
+                  <Partners />
+                </PageTransition>
+              </Suspense>
+            } 
+          />
+          
+          {/* Scholarships Route */}
+          <Route 
+            path="/scholarships" 
+            element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <PageTransition pageKey="scholarships">
+                  <Scholarships />
+                </PageTransition>
+              </Suspense>
+            } 
+          />
+          
+          {/* Scholars Route */}
+          <Route 
+            path="/scholars" 
+            element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <PageTransition pageKey="scholars">
+                  <Scholars />
+                </PageTransition>
+              </Suspense>
+            } 
+          />
+          
+          {/* Team Route */}
+          <Route 
+            path="/team" 
+            element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <PageTransition pageKey="team">
+                  <Team />
                 </PageTransition>
               </Suspense>
             } 

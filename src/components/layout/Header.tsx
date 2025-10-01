@@ -158,6 +158,10 @@ export const Header: React.FC<HeaderProps> = ({ scrolled }) => {
     { path: '/crisis', label: 'Crisis' },
     { path: '/core-areas', label: 'Core Areas' },
     { path: '/news', label: 'News' },
+    { path: '/scholarships', label: 'Scholarships' },
+    { path: '/scholars', label: 'Scholars' },
+    { path: '/team', label: 'Team' },
+    { path: '/partners', label: 'Partners' },
     { path: '/contact', label: 'Contact' }
   ];
 
