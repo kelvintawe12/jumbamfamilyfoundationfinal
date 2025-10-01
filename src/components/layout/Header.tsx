@@ -139,9 +139,21 @@ export const Header: React.FC<HeaderProps> = ({ scrolled }) => {
           description: 'Organizations working with us',
           icon: <Building size={14} />
         },
-        { 
-          path: '/news', 
-          label: 'News & Updates', 
+        {
+          path: '/feed',
+          label: 'Community Feed',
+          description: 'Interactive community updates',
+          icon: <Heart size={14} />
+        },
+        {
+          path: '/blog',
+          label: 'Blog',
+          description: 'Impact stories and foundation updates',
+          icon: <BookOpen size={14} />
+        },
+        {
+          path: '/news',
+          label: 'News & Updates',
           description: 'Latest news and announcements',
           icon: <BookOpen size={14} />
         }

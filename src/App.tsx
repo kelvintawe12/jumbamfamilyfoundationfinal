@@ -12,6 +12,8 @@ const Impact = lazy(() => import('./pages/Impact').then(module => ({ default: mo
 const Crisis = lazy(() => import('./pages/Crisis').then(module => ({ default: module.Crisis })));
 const CoreAreas = lazy(() => import('./pages/CoreAreas').then(module => ({ default: module.CoreAreas })));
 const News = lazy(() => import('./pages/News').then(module => ({ default: module.News })));
+const Blog = lazy(() => import('./pages/Blog').then(module => ({ default: module.Blog })));
+const Feed = lazy(() => import('./pages/Feed').then(module => ({ default: module.Feed })));
 const Contact = lazy(() => import('./pages/Contact').then(module => ({ default: module.Contact })));
 const Donate = lazy(() => import('./pages/Donate').then(module => ({ default: module.Donate })));
 const Scholarships = lazy(() => import('./pages/Scholarships').then(module => ({ default: module.Scholarships })));
@@ -156,17 +158,41 @@ const AppRouter = () => {
           />
           
           {/* News Route */}
-          <Route 
-            path="/news" 
+          <Route
+            path="/news"
             element={
               <Suspense fallback={<LoadingSpinner />}>
                 <PageTransition pageKey="news">
                   <News />
                 </PageTransition>
               </Suspense>
-            } 
+            }
           />
-          
+
+          {/* Feed Route */}
+          <Route
+            path="/feed"
+            element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <PageTransition pageKey="feed">
+                  <Feed />
+                </PageTransition>
+              </Suspense>
+            }
+          />
+
+          {/* Blog Route */}
+          <Route
+            path="/blog"
+            element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <PageTransition pageKey="blog">
+                  <Blog />
+                </PageTransition>
+              </Suspense>
+            }
+          />
+
           {/* Contact Route */}
           <Route 
             path="/contact" 

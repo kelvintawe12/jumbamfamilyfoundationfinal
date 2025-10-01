@@ -147,7 +147,7 @@ export const Home: React.FC = () => {
           clearInterval(interval);
           titleControls.start('visible');
         }
-      }, 80);
+      }, 60);
       return () => clearInterval(interval);
     }
   }, [titleInView, titleControls, fullTitle]);
@@ -356,16 +356,16 @@ export const Home: React.FC = () => {
                   className="font-heading text-5xl md:text-7xl font-bold leading-tight mb-6"
                   variants={premiumVariants.textReveal}
                 >
-                  <span className="bg-gradient-to-r from-white to-primary bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-white via-blue-200 to-cyan-300 bg-clip-text text-transparent">
                     {displayedTitle}
                   </span>
                   {displayedTitle.length < fullTitle.length && (
                     <motion.span 
-                      className="text-primary"
+                      className="text-cyan-300"
                       animate={{ opacity: [1, 0, 1] }}
-                      transition={{ duration: 1, repeat: Infinity }}
+                      transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
                     >
-                      |
+                      |_
                     </motion.span>
                   )}
                 </motion.h1>
@@ -847,15 +847,56 @@ export const Home: React.FC = () => {
                   </div>
                 </div>
                 <div className="grid grid-cols-3 gap-4 mb-6">
-                  {[1, 2, 3].map((_, index) => (
-                    <div key={index} className="text-center">
-                      <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center mx-auto mb-2">
-                        <span className="text-white font-bold text-lg">
-                          {['JF', 'MK', 'AN'][index]}
-                        </span>
+                  {[
+                    {
+                      name: 'Desmond Jumbam',
+                      position: 'Co-Founder & President',
+                      image: '/team/Desmond Profile pic_edited.png',
+                      initials: 'DJ'
+                    },
+                    {
+                      name: 'Seh Rebecca',
+                      position: 'Co-Founder & Vice President',
+                      image: '/team/Rebecca pic_edited.png',
+                      initials: 'SR'
+                    },
+                    {
+                      name: 'Therese Nsakwa',
+                      position: 'Financial Treasurer',
+                      image: '/team/Therese profile pic_edited.png',
+                      initials: 'TN'
+                    }
+                  ].map((member, index) => (
+                    <motion.div 
+                      key={index} 
+                      className="text-center group cursor-pointer"
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <div className="relative mb-3 mx-auto">
+                        <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center overflow-hidden">
+                          <img 
+                            src={member.image} 
+                            alt={member.name}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              const target = e.currentTarget as HTMLImageElement;
+                              const fallback = target.nextElementSibling as HTMLElement;
+                              if (fallback) {
+                                target.style.display = 'none';
+                                fallback.style.display = 'flex';
+                              }
+                            }}
+                          />
+                          <span className="text-white font-bold text-lg hidden">
+                            {member.initials}
+                          </span>
+                        </div>
+                        <div className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></div>
                       </div>
-                      <div className="text-sm font-semibold text-gray-700">Team Member</div>
-                    </div>
+                      <div className="text-sm font-semibold text-gray-700 mb-1">{member.name}</div>
+                      <div className="text-xs text-gray-500">{member.position}</div>
+                    </motion.div>
                   ))}
                 </div>
                 <Link 
@@ -886,19 +927,55 @@ export const Home: React.FC = () => {
                 </div>
                 <div className="space-y-4 mb-6">
                   {[
-                    { name: "University of Notre Dame", type: "Academic Partner" },
-                    { name: "Open Dreams", type: "Strategic Partner" },
-                    { name: "Local NGOs", type: "Community Partners" }
+                    { 
+                      name: "University of Notre Dame", 
+                      type: "Academic Partner",
+                      image: "/partners/partners1.png",
+                      description: "Leading academic institution supporting our scholarship program and research initiatives."
+                    },
+                    { 
+                      name: "Open Dreams", 
+                      type: "Strategic Partner",
+                      image: "/partners/partner2-opendreams.png",
+                      description: "Collaborative partner in youth empowerment and educational opportunities across Africa."
+                    }
                   ].map((partner, index) => (
-                    <div key={index} className="flex items-center p-3 bg-gray-50 rounded-lg">
-                      <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center mr-3">
-                        <Star className="w-5 h-5 text-primary" />
+                    <motion.div 
+                      key={index} 
+                      className="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors group"
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center mr-4 shadow-sm overflow-hidden">
+                        <img 
+                          src={partner.image} 
+                          alt={partner.name}
+                          className="w-10 h-10 object-contain"
+                          onError={(e) => {
+                            const target = e.currentTarget as HTMLImageElement;
+                            const fallback = target.nextElementSibling as HTMLElement;
+                            if (fallback) {
+                              target.style.display = 'none';
+                              fallback.style.display = 'block';
+                            }
+                          }}
+                        />
+                        <div className="w-8 h-8 bg-primary/20 rounded hidden items-center justify-center">
+                          <Star className="w-4 h-4 text-primary" />
+                        </div>
                       </div>
-                      <div>
-                        <div className="font-semibold text-gray-800">{partner.name}</div>
-                        <div className="text-sm text-gray-600">{partner.type}</div>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between">
+                          <h4 className="font-semibold text-gray-800 group-hover:text-primary transition-colors">
+                            {partner.name}
+                          </h4>
+                          <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full font-medium">
+                            {partner.type}
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-600 mt-1">{partner.description}</p>
                       </div>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
                 <Link 
