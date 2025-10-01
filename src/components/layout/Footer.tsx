@@ -1,6 +1,6 @@
-import React, { Children } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Instagram, Mail, Phone, MapPin, Linkedin, Youtube, ArrowRight } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Mail, Phone, MapPin, Linkedin, Youtube, ArrowRight, Heart, GraduationCap, Users, Handshake } from 'lucide-react';
 import { motion } from 'framer-motion';
 export const Footer: React.FC = () => {
   const containerVariants = {
@@ -62,90 +62,152 @@ export const Footer: React.FC = () => {
               <SocialIcon icon={<Youtube size={18} />} />
             </div>
           </motion.div>
-          {/* Quick Links */}
+          
+          {/* About Us */}
           <motion.div className="md:col-span-2" variants={itemVariants}>
-            <h4 className="font-heading text-lg font-bold mb-6 text-primary">
-              Quick Links
+            <h4 className="font-heading text-lg font-bold mb-6 text-primary flex items-center">
+              <Heart size={18} className="mr-2" />
+              About Us
             </h4>
             <ul className="space-y-3">
               <FooterLink to="/" label="Home" />
               <FooterLink to="/story" label="Our Story" />
               <FooterLink to="/model" label="Our Model" />
               <FooterLink to="/impact" label="Our Impact" />
+              <FooterLink to="/crisis" label="Crisis Info" />
             </ul>
           </motion.div>
-          {/* Learn More */}
+          
+          {/* Programs */}
           <motion.div className="md:col-span-2" variants={itemVariants}>
-            <h4 className="font-heading text-lg font-bold mb-6 text-primary">
-              Learn More
+            <h4 className="font-heading text-lg font-bold mb-6 text-primary flex items-center">
+              <GraduationCap size={18} className="mr-2" />
+              Programs
             </h4>
             <ul className="space-y-3">
-              <FooterLink to="/crisis" label="About the Crisis" />
               <FooterLink to="/core-areas" label="Core Areas" />
+              <FooterLink to="/scholarships" label="Scholarships" />
+              <FooterLink to="/scholars" label="Our Scholars" />
               <FooterLink to="/news" label="News & Stories" />
+            </ul>
+          </motion.div>
+          
+          {/* Community */}
+          <motion.div className="md:col-span-2" variants={itemVariants}>
+            <h4 className="font-heading text-lg font-bold mb-6 text-primary flex items-center">
+              <Users size={18} className="mr-2" />
+              Community
+            </h4>
+            <ul className="space-y-3">
+              <FooterLink to="/team" label="Our Team" />
+              <FooterLink to="/partners" label="Partners" />
               <FooterLink to="/contact" label="Contact Us" />
+              <FooterLink to="/donate" label="Donate" />
             </ul>
           </motion.div>
           {/* Contact */}
-          <motion.div className="md:col-span-4" variants={itemVariants}>
+          <motion.div className="md:col-span-2" variants={itemVariants}>
             <h4 className="font-heading text-lg font-bold mb-6 text-primary">
               Contact Us
             </h4>
             <div className="space-y-4 font-body text-gray-300">
               <div className="flex items-start">
-                <Mail size={18} className="mr-3 mt-1 text-primary" />
+                <Mail size={16} className="mr-3 mt-1 text-primary" />
                 <div>
-                  <div className="font-medium text-white">Email</div>
-                  <a href="mailto:info@jumbamfamilyfoundation.org" className="hover:text-primary transition-colors">
-                    info@jumbamfamilyfoundation.org
+                  <div className="font-medium text-white text-sm">Email</div>
+                  <a href="mailto:jumbamfamilyfoundation@gmail.com" className="hover:text-primary transition-colors text-sm">
+                    jumbamfamilyfoundation@gmail.com
                   </a>
                 </div>
               </div>
               <div className="flex items-start">
-                <Phone size={18} className="mr-3 mt-1 text-primary" />
+                <Phone size={16} className="mr-3 mt-1 text-primary" />
                 <div>
-                  <div className="font-medium text-white">Phone</div>
-                  <a href="tel:+237123456789" className="hover:text-primary transition-colors">
-                    +237 123 456 789
+                  <div className="font-medium text-white text-sm">Phone</div>
+                  <a href="tel:+237691513245" className="hover:text-primary transition-colors text-sm">
+                    (+237) 691-51-32-45
                   </a>
                 </div>
               </div>
               <div className="flex items-start">
-                <MapPin size={18} className="mr-3 mt-1 text-primary" />
+                <MapPin size={16} className="mr-3 mt-1 text-primary" />
                 <div>
-                  <div className="font-medium text-white">Location</div>
-                  <div>Bamenda, North West Region, Cameroon</div>
+                  <div className="font-medium text-white text-sm">Location</div>
+                  <div className="text-sm">North West Region, Cameroon</div>
                 </div>
               </div>
             </div>
-            {/* Newsletter Signup */}
-            <div className="mt-8">
-              <h5 className="font-heading font-bold mb-3 text-white">
-                Subscribe to Our Newsletter
-              </h5>
-              <div className="flex">
-                <input type="email" placeholder="Your email address" className="flex-1 bg-white/10 text-white border border-white/20 rounded-l-md px-4 py-2 focus:outline-none focus:ring-1 focus:ring-primary" />
-                <button className="bg-primary text-secondary px-4 py-2 rounded-r-md hover:bg-primary/90 transition-colors">
-                  <ArrowRight size={18} />
-                </button>
-              </div>
+            
+            {/* Quick Actions */}
+            <div className="mt-6 space-y-2">
+              <Link 
+                to="/donate" 
+                className="w-full bg-gradient-to-r from-primary to-yellow-500 text-secondary px-4 py-2 rounded-lg font-semibold text-sm hover:shadow-lg transition-all duration-300 flex items-center justify-center"
+              >
+                <Heart size={16} className="mr-2" />
+                Donate Now
+              </Link>
+              <Link 
+                to="/contact" 
+                className="w-full border border-primary text-primary px-4 py-2 rounded-lg font-semibold text-sm hover:bg-primary hover:text-secondary transition-all duration-300 flex items-center justify-center"
+              >
+                <Mail size={16} className="mr-2" />
+                Get In Touch
+              </Link>
             </div>
           </motion.div>
         </motion.div>
-        {/* Bottom Bar */}
-        <motion.div className="border-t border-white/10 mt-12 pt-8 text-center font-body text-sm text-gray-400" initial={{
-        opacity: 0
-      }} whileInView={{
-        opacity: 1
-      }} transition={{
-        delay: 0.5
-      }} viewport={{
-        once: true
-      }}>
-          <p>
-            &copy; {new Date().getFullYear()} Jumbam Family Foundation. All
-            rights reserved.
-          </p>
+        
+        {/* Bottom Section with Additional Links */}
+        <motion.div 
+          className="border-t border-white/10 mt-12 pt-8"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          viewport={{ once: true }}
+        >
+          {/* Additional Quick Links */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div>
+              <h5 className="font-semibold text-white mb-3 text-sm">Get Involved</h5>
+              <ul className="space-y-2">
+                <li><Link to="/donate" className="text-gray-400 hover:text-primary transition-colors text-sm">Make a Donation</Link></li>
+                <li><Link to="/scholarships" className="text-gray-400 hover:text-primary transition-colors text-sm">Apply for Scholarship</Link></li>
+                <li><Link to="/team" className="text-gray-400 hover:text-primary transition-colors text-sm">Join Our Team</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h5 className="font-semibold text-white mb-3 text-sm">Resources</h5>
+              <ul className="space-y-2">
+                <li><Link to="/news" className="text-gray-400 hover:text-primary transition-colors text-sm">Latest News</Link></li>
+                <li><Link to="/scholars" className="text-gray-400 hover:text-primary transition-colors text-sm">Success Stories</Link></li>
+                <li><Link to="/impact" className="text-gray-400 hover:text-primary transition-colors text-sm">Our Impact</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h5 className="font-semibold text-white mb-3 text-sm">Learn More</h5>
+              <ul className="space-y-2">
+                <li><Link to="/crisis" className="text-gray-400 hover:text-primary transition-colors text-sm">Anglophone Crisis</Link></li>
+                <li><Link to="/core-areas" className="text-gray-400 hover:text-primary transition-colors text-sm">Our Work Areas</Link></li>
+                <li><Link to="/partners" className="text-gray-400 hover:text-primary transition-colors text-sm">Our Partners</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h5 className="font-semibold text-white mb-3 text-sm">Connect</h5>
+              <ul className="space-y-2">
+                <li><a href="mailto:jumbamfamilyfoundation@gmail.com" className="text-gray-400 hover:text-primary transition-colors text-sm">Email Us</a></li>
+                <li><a href="https://wa.me/237691513245" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary transition-colors text-sm">WhatsApp</a></li>
+                <li><Link to="/contact" className="text-gray-400 hover:text-primary transition-colors text-sm">Contact Form</Link></li>
+              </ul>
+            </div>
+          </div>
+          
+          {/* Copyright */}
+          <div className="text-center font-body text-sm text-gray-400 border-t border-white/10 pt-6">
+            <p>
+              &copy; {new Date().getFullYear()} Jumbam Family Foundation. All rights reserved. | Restoring Hope Through Education, Healthcare & Women Empowerment
+            </p>
+          </div>
         </motion.div>
       </div>
     </footer>;
