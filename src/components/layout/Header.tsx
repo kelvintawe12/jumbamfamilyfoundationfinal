@@ -22,6 +22,23 @@ export const Header: React.FC<HeaderProps> = ({ scrolled }) => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
+  // Body scroll lock effect
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = '0px'; // Prevent layout shift
+    } else {
+      document.body.style.overflow = 'unset';
+      document.body.style.paddingRight = 'unset';
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = 'unset';
+      document.body.style.paddingRight = 'unset';
+    };
+  }, [mobileMenuOpen]);
+
   const isActive = (path: string) => {
     return location.pathname === path;
   };
@@ -98,8 +115,7 @@ export const Header: React.FC<HeaderProps> = ({ scrolled }) => {
       }
     },
     hover: {
-      y: -2,
-      scale: 1.05,
+      scale: 1.02,
       transition: {
         duration: 0.2,
         ease: [0.16, 1, 0.3, 1]
@@ -151,7 +167,7 @@ export const Header: React.FC<HeaderProps> = ({ scrolled }) => {
       animate="visible"
       variants={headerVariants}
       style={{ y: headerY, opacity: headerOpacity }}
-      className="fixed top-0 w-full z-50 bg-secondary backdrop-blur-lg shadow-xl border-b border-primary/20"
+      className="fixed top-0 w-full z-[10000] bg-secondary/95 backdrop-blur-sm shadow-xl border-b border-primary/20"
     >
       {/* Animated Background Pattern */}
       <div 
@@ -225,6 +241,11 @@ export const Header: React.FC<HeaderProps> = ({ scrolled }) => {
                 className="text-white font-heading font-bold text-xl tracking-wider block"
                 whileHover={{ color: "#FFD700" }}
                 transition={{ duration: 0.3 }}
+                style={{ 
+                  WebkitFontSmoothing: 'antialiased',
+                  MozOsxFontSmoothing: 'grayscale',
+                  textRendering: 'optimizeLegibility'
+                }}
               >
                 Jumbam Family Foundation
               </motion.span>
@@ -238,6 +259,11 @@ export const Header: React.FC<HeaderProps> = ({ scrolled }) => {
           <motion.nav 
             className="hidden lg:flex items-center space-x-8"
             variants={navVariants}
+            style={{ 
+              WebkitFontSmoothing: 'antialiased',
+              MozOsxFontSmoothing: 'grayscale',
+              textRendering: 'optimizeLegibility'
+            }}
           >
             {navigation.map((item, index) => (
               <motion.div
@@ -254,6 +280,12 @@ export const Header: React.FC<HeaderProps> = ({ scrolled }) => {
                       ? 'text-primary bg-primary/10' 
                       : 'text-white hover:text-primary hover:bg-primary/5'
                   }`}
+                  style={{ 
+                    WebkitFontSmoothing: 'antialiased',
+                    MozOsxFontSmoothing: 'grayscale',
+                    textRendering: 'optimizeLegibility',
+                    transform: 'translateZ(0)' // Force hardware acceleration without blur
+                  }}
                 >
                   {item.label}
                   
@@ -329,8 +361,13 @@ export const Header: React.FC<HeaderProps> = ({ scrolled }) => {
             initial={{ opacity: 0, rotate: -90 }}
             animate={{ opacity: 1, rotate: 0 }}
             transition={{ delay: 0.5, duration: 0.5 }}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            style={{ 
+              WebkitFontSmoothing: 'antialiased',
+              MozOsxFontSmoothing: 'grayscale',
+              transform: 'translateZ(0)'
+            }}
           >
             <AnimatePresence mode="wait">
               {mobileMenuOpen ? (
@@ -358,234 +395,258 @@ export const Header: React.FC<HeaderProps> = ({ scrolled }) => {
           </motion.button>
         </div>
       </div>
+
       {/* Dark Blue Modal Mobile Dropdown */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <>
             {/* Backdrop Overlay */}
             <motion.div
-             className="lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-[9998]"
+             className="lg:hidden fixed inset-0 bg-black/70 z-[9998]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
               onClick={() => setMobileMenuOpen(false)}
+              style={{ top: 0, left: 0, right: 0, bottom: 0, position: 'fixed' }}
             />
             
             {/* Modal Dropdown */}
             <motion.div
-              className="lg:hidden fixed top-20 left-4 right-4 bg-secondary/98 backdrop-blur-xl shadow-2xl border border-primary/30 rounded-2xl z-[9999] max-h-[80vh] overflow-y-auto"
+              className="lg:hidden fixed top-20 left-4 right-4 shadow-2xl border border-yellow-400/40 rounded-2xl z-[9999] max-h-[80vh] overflow-y-auto backdrop-blur-sm"
+              style={{ 
+              position: 'fixed', 
+              zIndex: 9999,
+              background: 'linear-gradient(135deg, #23272e 0%, #FFD700 200%)'
+              }}
               initial={{ 
-                scale: 0.9,
-                opacity: 0,
-                y: -20
+              scale: 0.9,
+              opacity: 0,
+              y: -20
               }}
               animate={{ 
-                scale: 1,
-                opacity: 1,
-                y: 0
+              scale: 1,
+              opacity: 1,
+              y: 0
               }}
               exit={{ 
-                scale: 0.9,
-                opacity: 0,
-                y: -20
+              scale: 0.9,
+              opacity: 0,
+              y: -20
               }}
               transition={{ 
-                duration: 0.4,
-                ease: [0.16, 1, 0.3, 1]
+              duration: 0.4,
+              ease: [0.16, 1, 0.3, 1]
               }}
             >
               {/* Modal Header */}
-              <div className="flex items-center justify-between p-6 border-b border-primary/20">
-                <motion.h3 
-                  className="text-white font-heading font-bold text-xl"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2 }}
-                >
-                  Navigation
-                </motion.h3>
-                <motion.button
-                  className="text-white/80 hover:text-primary transition-colors p-2 rounded-lg hover:bg-white/5"
-                  onClick={() => setMobileMenuOpen(false)}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  initial={{ opacity: 0, rotate: -90 }}
-                  animate={{ opacity: 1, rotate: 0 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  <X size={20} />
-                </motion.button>
+              <div className="flex items-center justify-between p-6 border-b border-yellow-400/30">
+              <motion.h3 
+                className="text-yellow-300 font-heading font-bold text-xl"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 }}
+                style={{ 
+                WebkitFontSmoothing: 'antialiased',
+                MozOsxFontSmoothing: 'grayscale',
+                textRendering: 'optimizeLegibility'
+                }}
+              >
+                Navigation
+              </motion.h3>
+              <motion.button
+                className="text-yellow-200 hover:text-yellow-400 transition-colors p-2 rounded-lg hover:bg-yellow-400/10"
+                onClick={() => setMobileMenuOpen(false)}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                initial={{ opacity: 0, rotate: -90 }}
+                animate={{ opacity: 1, rotate: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <X size={20} />
+              </motion.button>
               </div>
 
               {/* Modal Content */}
               <div className="p-6">
-                {/* Navigation Grid */}
-                <div className="grid grid-cols-2 gap-3 mb-6">
-                  {navigation.map((item, index) => (
-                    <motion.div
-                      key={item.path}
-                      initial={{ 
-                        x: index % 2 === 0 ? -30 : 30, 
-                        opacity: 0,
-                        scale: 0.8
-                      }}
-                      animate={{ 
-                        x: 0, 
-                        opacity: 1,
-                        scale: 1
-                      }}
-                      exit={{ 
-                        x: index % 2 === 0 ? -30 : 30, 
-                        opacity: 0,
-                        scale: 0.8
-                      }}
-                      transition={{ 
-                        duration: 0.5,
-                        delay: 0.1 + (index * 0.05),
-                        ease: [0.16, 1, 0.3, 1]
-                      }}
-                      whileHover={{ 
-                        scale: 1.03,
-                        y: -3
-                      }}
-                      whileTap={{ scale: 0.97 }}
-                    >
-                      <Link
-                        to={item.path}
-                        className={`block w-full py-4 px-4 rounded-xl font-heading font-semibold text-center transition-all duration-300 relative overflow-hidden group ${
-                          isActive(item.path)
-                            ? 'bg-primary text-secondary shadow-lg border border-primary'
-                            : 'bg-white/10 text-white hover:bg-primary/20 hover:text-primary border border-white/20 hover:border-primary/50'
-                        }`}
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        {/* Background animation */}
-                        <motion.div
-                          className="absolute inset-0 bg-gradient-to-r from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                          initial={false}
-                        />
-                        
-                        <span className="relative z-10">{item.label}</span>
-                        
-                        {/* Active indicator */}
-                        {isActive(item.path) && (
-                          <motion.div
-                            className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-6 h-1 bg-secondary rounded-full"
-                            initial={{ scaleX: 0 }}
-                            animate={{ scaleX: 1 }}
-                            transition={{ duration: 0.3, delay: 0.4 }}
-                          />
-                        )}
-                      </Link>
-                    </motion.div>
-                  ))}
-                </div>
-
-                {/* Donate Button */}
+              {/* Navigation Grid */}
+              <div 
+                className="grid grid-cols-2 gap-3 mb-6"
+                style={{ 
+                WebkitFontSmoothing: 'antialiased',
+                MozOsxFontSmoothing: 'grayscale',
+                textRendering: 'optimizeLegibility'
+                }}
+              >
+                {navigation.map((item, index) => (
                 <motion.div
+                  key={item.path}
                   initial={{ 
-                    y: 30, 
-                    opacity: 0,
-                    scale: 0.9
+                  x: index % 2 === 0 ? -30 : 30, 
+                  opacity: 0,
+                  scale: 0.8
                   }}
                   animate={{ 
-                    y: 0, 
-                    opacity: 1,
-                    scale: 1
+                  x: 0, 
+                  opacity: 1,
+                  scale: 1
                   }}
                   exit={{ 
-                    y: 30, 
-                    opacity: 0,
-                    scale: 0.9
+                  x: index % 2 === 0 ? -30 : 30, 
+                  opacity: 0,
+                  scale: 0.8
                   }}
                   transition={{ 
-                    duration: 0.5,
-                    delay: 0.5,
-                    ease: [0.16, 1, 0.3, 1]
+                  duration: 0.5,
+                  delay: 0.1 + (index * 0.05),
+                  ease: [0.16, 1, 0.3, 1]
                   }}
-                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileHover={{ 
+                  scale: 1.02
+                  }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <Link
-                    to="/donate"
-                    className="w-full bg-gradient-to-r from-primary via-yellow-400 to-primary bg-size-200 hover:bg-pos-100 text-secondary py-5 px-6 rounded-xl font-heading font-bold text-lg flex items-center justify-center shadow-xl transition-all duration-500 relative overflow-hidden group"
-                    onClick={() => setMobileMenuOpen(false)}
+                  to={item.path}
+                  className={`block w-full py-4 px-4 rounded-xl font-heading font-semibold text-center transition-all duration-300 relative overflow-hidden group ${
+                    isActive(item.path)
+                    ? 'bg-yellow-400 text-gray-900 shadow-lg border border-yellow-400'
+                    : 'bg-yellow-400/10 text-yellow-100 hover:bg-yellow-400/20 hover:text-yellow-300 border border-yellow-400/20 hover:border-yellow-400/60'
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                  style={{ 
+                    WebkitFontSmoothing: 'antialiased',
+                    MozOsxFontSmoothing: 'grayscale',
+                    textRendering: 'optimizeLegibility',
+                    transform: 'translateZ(0)'
+                  }}
                   >
-                    {/* Animated background */}
+                  {/* Background animation */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    initial={false}
+                  />
+                  
+                  <span className="relative z-10">{item.label}</span>
+                  
+                  {/* Active indicator */}
+                  {isActive(item.path) && (
                     <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-6 h-1 bg-yellow-300 rounded-full"
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: 0.3, delay: 0.4 }}
                     />
-                    
-                    {/* Shimmer effect */}
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12"
-                      initial={{ x: '-100%' }}
-                      animate={{ x: '200%' }}
-                      transition={{ 
-                        duration: 2.5, 
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        repeatDelay: 3
-                      }}
-                    />
-                    
-                    <motion.div
-                      className="relative z-10 flex items-center"
-                      animate={{ 
-                        scale: [1, 1.05, 1]
-                      }}
-                      transition={{ 
-                        duration: 2, 
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                      }}
-                    >
-                      <Heart size={22} className="mr-3" />
-                      <span>Support Our Mission</span>
-                    </motion.div>
+                  )}
                   </Link>
                 </motion.div>
+                ))}
+              </div>
 
-                {/* Decorative Footer */}
-                <motion.div 
-                  className="flex justify-center items-center mt-6 pt-4 border-t border-white/10"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.7 }}
+              {/* Donate Button */}
+              <motion.div
+                initial={{ 
+                y: 30, 
+                opacity: 0,
+                scale: 0.9
+                }}
+                animate={{ 
+                y: 0, 
+                opacity: 1,
+                scale: 1
+                }}
+                exit={{ 
+                y: 30, 
+                opacity: 0,
+                scale: 0.9
+                }}
+                transition={{ 
+                duration: 0.5,
+                delay: 0.5,
+                ease: [0.16, 1, 0.3, 1]
+                }}
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Link
+                to="/donate"
+                className="w-full bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-size-200 hover:bg-pos-100 text-gray-900 py-5 px-6 rounded-xl font-heading font-bold text-lg flex items-center justify-center shadow-xl transition-all duration-500 relative overflow-hidden group"
+                onClick={() => setMobileMenuOpen(false)}
                 >
-                  <div className="flex space-x-2">
-                    {[0, 1, 2].map((index) => (
-                      <motion.div
-                        key={index}
-                        className="w-2 h-2 bg-primary rounded-full"
-                        animate={{ 
-                          scale: [1, 1.3, 1],
-                          opacity: [0.4, 1, 0.4]
-                        }}
-                        transition={{ 
-                          duration: 2, 
-                          repeat: Infinity,
-                          ease: "easeInOut",
-                          delay: index * 0.2
-                        }}
-                      />
-                    ))}
-                  </div>
-                  <motion.div
-                    className="ml-4 text-primary/60"
-                    animate={{ 
-                      rotate: [0, 360]
-                    }}
-                    transition={{ 
-                      duration: 8, 
-                      repeat: Infinity,
-                      ease: "linear"
-                    }}
-                  >
-                    <Sparkles size={16} />
-                  </motion.div>
+                {/* Animated background */}
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-yellow-300 to-yellow-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                />
+                
+                {/* Shimmer effect */}
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12"
+                  initial={{ x: '-100%' }}
+                  animate={{ x: '200%' }}
+                  transition={{ 
+                  duration: 2.5, 
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  repeatDelay: 3
+                  }}
+                />
+                
+                <motion.div
+                  className="relative z-10 flex items-center"
+                  animate={{ 
+                  scale: [1, 1.05, 1]
+                  }}
+                  transition={{ 
+                  duration: 2, 
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                  }}
+                >
+                  <Heart size={22} className="mr-3 text-yellow-700" />
+                  <span>Support Our Mission</span>
                 </motion.div>
+                </Link>
+              </motion.div>
+
+              {/* Decorative Footer */}
+              <motion.div 
+                className="flex justify-center items-center mt-6 pt-4 border-t border-yellow-400/20"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.7 }}
+              >
+                <div className="flex space-x-2">
+                {[0, 1, 2].map((index) => (
+                  <motion.div
+                  key={index}
+                  className="w-2 h-2 bg-yellow-400 rounded-full"
+                  animate={{ 
+                    scale: [1, 1.3, 1],
+                    opacity: [0.4, 1, 0.4]
+                  }}
+                  transition={{ 
+                    duration: 2, 
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: index * 0.2
+                  }}
+                  />
+                ))}
+                </div>
+                <motion.div
+                className="ml-4 text-yellow-300/80"
+                animate={{ 
+                  rotate: [0, 360]
+                }}
+                transition={{ 
+                  duration: 8, 
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+                >
+                <Sparkles size={16} />
+                </motion.div>
+              </motion.div>
               </div>
             </motion.div>
           </>
@@ -594,39 +655,3 @@ export const Header: React.FC<HeaderProps> = ({ scrolled }) => {
     </motion.header>
   );
 };
-interface NavLinkProps {
-  to: string;
-  label: string;
-  active: boolean;
-  delay?: number;
-}
-const NavLink: React.FC<NavLinkProps> = ({
-  to,
-  label,
-  active,
-  delay = 0
-}) => <motion.div initial={{
-  y: -20,
-  opacity: 0
-}} animate={{
-  y: 0,
-  opacity: 1
-}} transition={{
-  delay,
-  duration: 0.5,
-  type: 'spring',
-  stiffness: 100
-}}>
-    <Link to={to} className={`relative font-body font-medium transition-colors hover:text-primary ${active ? 'text-primary' : 'text-white'}`}>
-      {label}
-      {active && <motion.span layoutId="activeNavIndicator" className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary" initial={{
-      width: 0
-    }} animate={{
-      width: '100%'
-    }} transition={{
-      duration: 0.3,
-      type: 'spring',
-      stiffness: 200
-    }} />}
-    </Link>
-  </motion.div>;
